@@ -162,7 +162,7 @@ mamba activate osirenv
 git clone git@github.com:beykyle/osiris.git
 cd osiris
 py setup.py build -j{nproc}
-pip install .
+pip install -e .
 ```
 
 Citation
