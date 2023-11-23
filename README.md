@@ -13,37 +13,28 @@ The goals of this project are to provide a fast, flexible and high-fidelity solv
 Python Installation
 ------------
 
-`osiris` is available on [pypi](pypi.org) at []():
-
-**On Unix (Linux, OS X)**
+`osiris` is available on [pypi](pypi.org) at [pypi.org/project/osiris](https://pypi.org/project/osiris):
 
  - `pip install osiris`
 
-**On Windows (Requires Visual Studio 2015)**
+Example use
+--------------
 
- - For Python 3.7+:
-     - `pip install osiris`
+CMake integration
+-----------------
 
-Windows runtime requirements
-----------------------------
+`osiris` supports CMake integration using [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) with static linkage. Add the following to your `CMakeLists.txt`:
 
-On Windows, the Visual C++ 2015 redistributable packages are a runtime
-requirement for this project. It can be found [here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
-
-If you use the Anaconda python distribution, you may require the Visual Studio
-runtime as a platform-dependent runtime requirement for you package:
-
-```yaml
-requirements:
-  build:
-    - python
-    - setuptools
-    - pybind11
-
-  run:
-   - python
-   - vs2015_runtime  # [win]
+```cmake
+FetchContent_Declare(
+  omplib GIT_REPOSITORY https://github.com/beykyle/osiris.git
+  GIT_TAG "origin/main"
+  )
+FetchContent_MakeAvailable(osiris_lib)
 ```
+
+Now you can `#include` files like `"potential/params.hpp"` into your project, as long as you make `osiris_lib` a dependency of the relevant target in your `CMakeLists.txt`.
+
 
 Standalone executable 
 ----------------------------
@@ -85,22 +76,6 @@ make docs
 ```
 
 from the `build/` directory. 
-
-CMake integration
------------------
-
-`osiris` supports CMake integration using [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) with static linkage. Add the following to your `CMakeLists.txt`:
-
-```cmake
-FetchContent_Declare(
-  omplib GIT_REPOSITORY https://github.com/beykyle/osiris.git
-  GIT_TAG "origin/main"
-  )
-FetchContent_MakeAvailable(osiris_lib)
-```
-
-Now you can `#include` files like `"potential/params.hpp"` into your project, as long as you make `osiris_lib` a dependency of the relevant target.
-
 
 Running the tests
 -----------------
@@ -146,11 +121,12 @@ Thread model: posix
 - [numpy](https://numpy.org/)
 - [pybind11](https://pybind11.readthedocs.io/en/stable/index.html)
 - [xtensor-python](https://github.com/xtensor-stack/xtensor-python)
+- [pytest](https://docs.pytest.org/en/7.4.x/)
 
 It is highly recomended to use use a package, dependency and environment manager like [mamba](https://mamba.readthedocs.io/en/latest/) or [conda](https://docs.conda.io/en/latest/). Then, setting up an environment to run `osiris` with `python` is as easy as (e.g. using `mamba`), from `pypi`:
 
 ```zsh
-mamba create -n osirenv python cmake compilers pybind11 numpy xtensor-python
+mamba create -n osirenv python cmake compilers numpy pybind11 xtensor-python pytest
 mamba activate osirenv
 pip install osiris
 ```
@@ -164,6 +140,28 @@ cd osiris
 py setup.py build -j{nproc}
 pip install -e .
 ```
+
+Windows runtime requirements
+----------------------------
+
+On Windows, the Visual C++ 2015 redistributable packages are a runtime
+requirement for this project. It can be found [here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
+
+If you use the Anaconda python distribution, you may require the Visual Studio
+runtime as a platform-dependent runtime requirement for you package:
+
+```yaml
+requirements:
+  build:
+    - python
+    - setuptools
+    - pybind11
+
+  run:
+   - python
+   - vs2015_runtime  # [win]
+```
+
 
 Citation
 -----------------
