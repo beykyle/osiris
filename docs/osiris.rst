@@ -1,0 +1,4 @@
+osiris
+=========================
+
+.. automodule:: osiris

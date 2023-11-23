@@ -1,0 +1,2 @@
+add_executable(osiris_example_application osiris_example_app.cpp)
+target_link_libraries(osiris_example_application osiris_lib nlohmann_json::nlohmann_json)
