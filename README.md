@@ -3,7 +3,7 @@ osiris
 
 Optical model ScatterIng & ReactIon Software (OSIRIS)
 
-A nuclear reaction code with a `python` interface.
+A fast, modern nuclear reaction code with a `python` interface.
 
 This is a library for nuclear reaction calculations, with a primary focus on nucleon-nuclear scattering using optical potentials. It is equipped with an R-Matrix solver on a Lagrange-Legendre mesh for calculating scattering matrix elements and cross sections. Applications include calibration and uncertainty quantification of optical model parameters, Hauser-Feshbach calculations of compound-nuclei, and more. Also included is a module for running the online stage of a trained reduced basis emulator over wide regions of parameter space using binary tangent space partitioning. 
 
