@@ -141,6 +141,10 @@ py setup.py build -j{nproc}
 pip install -e .
 ```
 
+Parallel execution with MPI
+----------------------------
+
+
 Windows runtime requirements
 ----------------------------
 
