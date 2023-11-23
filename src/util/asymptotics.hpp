@@ -12,7 +12,6 @@ namespace osiris {
 
 namespace asymptotics {
 
-
 ///@brief reduced spherical Bessel function of 1st kind
 struct F {
   int l;
@@ -33,7 +32,7 @@ struct h_plus {
   h_plus(int l) : l(l){};
   cmpl operator()(real z) {
     using constants::i;
-    return  G{l}(z) + i * F{l}(z);
+    return G{l}(z) + i * F{l}(z);
   }
 };
 
@@ -43,11 +42,11 @@ struct h_minus {
   h_minus(int l) : l(l){};
   cmpl operator()(real z) {
     using constants::i;
-    return  G{l}(z) - i * F{l}(z);
+    return G{l}(z)-i * F{l}(z);
   }
 };
 
-/// @tparam ReducedphBessel a reduced spherical bessel function or linear combo; 
+/// @tparam ReducedphBessel a reduced spherical bessel function or linear combo;
 /// one of: { F, G, h_minus, h_plus}
 template <class ReducedSphBessel>
 /// @brief evaluates d/ds s*f(s)
@@ -56,9 +55,9 @@ struct d_dz {
   d_dz(ReducedSphBessel f) : f(f){};
   cmpl operator()(real z) {
     const auto l = f.l;
-    return f(z) * static_cast<cmpl>(1 + l) / z - ReducedSphBessel{l+1}(z);
+    return f(z) * static_cast<cmpl>(1 + l) / z - ReducedSphBessel{l + 1}(z);
   }
 };
-}
+} // namespace asymptotics
 } // namespace osiris
 #endif

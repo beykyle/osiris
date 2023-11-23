@@ -65,7 +65,7 @@ public:
   real real_surf_V(int, int, real) const override { return 0; }
   real real_surf_r(int, int, real) const override { return 0; }
 
-  CH89Params(const CH89Params<projectile>& rhs) = default;
+  CH89Params(const CH89Params<projectile> &rhs) = default;
 
   // construct using default CH89 params
   CH89Params();
@@ -135,7 +135,7 @@ public:
   constexpr static Proj projectile = Proj::proton;
   real real_coul_r(int Z, int A, real erg) const final;
 
-  CH89Params(const CH89Params<Proj::proton>& rhs) = default;
+  CH89Params(const CH89Params<Proj::proton> &rhs) = default;
   CH89Params();
   CH89Params(json p);
 };

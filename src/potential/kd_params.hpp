@@ -67,7 +67,7 @@ public:
   real real_surf_V(int, int, real) const override { return 0; }
   real real_surf_r(int, int, real) const override { return 0; }
 
-  KD03Params(const KD03Params<projectile>& rhs) = default;
+  KD03Params(const KD03Params<projectile> &rhs) = default;
 
   // @brief Construct using the default KD03 params
   KD03Params();
@@ -109,8 +109,7 @@ public:
       v3_A = p["KDHartreeFock_V3_A_n"];
       w1_0 = p["KDImagVolume_W1_0_n"];
       w1_A = p["KDImagVolume_W1_A_n"];
-    }
-    else if constexpr (projectile == Proj::proton) {
+    } else if constexpr (projectile == Proj::proton) {
       e_fermi_0 = -8.4075;
       e_fermi_A = 0.01378;
       ad_0 = p["KDImagSurface_a_0_p"];
@@ -142,7 +141,7 @@ public:
   constexpr static Proj projectile = Proj::proton;
   real real_coul_r(int Z, int A, real erg) const final;
 
-  KD03Params(const KD03Params<Proj::proton>& rhs) = default;
+  KD03Params(const KD03Params<Proj::proton> &rhs) = default;
   KD03Params();
   KD03Params(json p);
   static KD03Params<Proj::proton> build_KDUQ();
@@ -224,16 +223,14 @@ real KD03Params<proj>::real_cent_V(int Z, int A, real erg) const {
     const real v3 = v3_0 - v3_A * a;
 
     return -v1 * (1. - v2 * dE + v3 * dE * dE - v4 * dE * dE * dE);
-  }
-  else if constexpr (proj == Proj::proton) {
+  } else if constexpr (proj == Proj::proton) {
     const real v2 = v2_0 + v2_A * a;
     const real v3 = v3_0 + v3_A * a;
     const real rc = KD03Params<Proj::proton>::real_coul_r(Z, A, erg);
     const real vc = 6 * z * constants::e_sqr / (5 * rc * pow(a, 1. / 3.));
 
-    return -(
-        v1 * (1. - v2 * dE + v3 * dE * dE - v4 * dE * dE * dE) +
-        vc * v1 * (v2 - 2. * v3 * dE + 3. * v4 * dE * dE));
+    return -(v1 * (1. - v2 * dE + v3 * dE * dE - v4 * dE * dE * dE) +
+             vc * v1 * (v2 - 2. * v3 * dE + 3. * v4 * dE * dE));
   }
 }
 

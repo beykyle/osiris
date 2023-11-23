@@ -23,7 +23,7 @@ struct Channel {
   /// @brief coupled AM states of the channel. This type is meant to be mutable,
   /// with l and J2 updated according to set_spin
   struct FermionSpinOrbitCoupling {
-    /// @brief 2j+1, j being the total angular momentum of channel 
+    /// @brief 2j+1, j being the total angular momentum of channel
     /// (e.g. dimension of the representation of SU(2) denoted by j)
     int j21;
     /// @brief orbital angular momentum [hbar]
@@ -37,7 +37,7 @@ struct Channel {
         : j21(j21), l(l), pi(update_pi(l)) {
       assert(l >= 0);
       assert(j21 >= 0);
-      assert(2*l +1 - j21 == -1 or 2*l+1 - j21 == 1); 
+      assert(2 * l + 1 - j21 == -1 or 2 * l + 1 - j21 == 1);
     }
 
     /// @brief initialize AM to S-Wave state
@@ -56,8 +56,7 @@ struct Channel {
       int l = 0;
       if constexpr (p == Polarization::up) {
         coupling.resize(lmax);
-      }
-      else {
+      } else {
         coupling.resize(lmax - 1);
         l = 1;
       }
@@ -88,13 +87,12 @@ struct Channel {
     /// ab is the Bohr radius, Z_t and Z_p are the target and product charges
     real sommerfield_param;
 
-    Energetics(real erg_cms, const Channel& ch)
+    Energetics(real erg_cms, const Channel &ch)
         : erg_cms(erg_cms - ch.threshold),
-          erg_lab(
-              erg_cms *
-              (ch.proj_mass * constants::MeV_per_amu +
-               ch.targ_mass * constants::MeV_per_amu) /
-              (ch.targ_mass * constants::MeV_per_amu)),
+          erg_lab(erg_cms *
+                  (ch.proj_mass * constants::MeV_per_amu +
+                   ch.targ_mass * constants::MeV_per_amu) /
+                  (ch.targ_mass * constants::MeV_per_amu)),
           k([this, &ch]() -> real {
             using constants::MeV_per_amu;
             using constants::hbar;
@@ -139,12 +137,13 @@ struct Channel {
           }()) {}
   };
 
-  /// @brief analytic solutions of free, reduced, radial Schrödinger eqn; also asymptotic 
-  /// (r → ∞) solutions for non-zero interactions (provided interaction → 0 faster than 1/r)
+  /// @brief analytic solutions of free, reduced, radial Schrödinger eqn; also
+  /// asymptotic (r → ∞) solutions for non-zero interactions (provided
+  /// interaction → 0 faster than 1/r)
   struct Asymptotics {
-    /// @brief value of the outgoing asymptotic wavefunction 
+    /// @brief value of the outgoing asymptotic wavefunction
     cmpl wvfxn_out{};
-    /// @brief value of the incoming asymptotic wavefunction 
+    /// @brief value of the incoming asymptotic wavefunction
     cmpl wvfxn_in{};
     /// @brief value of the derivative of the outgoing asymptotic wavefunction
     cmpl wvfxn_deriv_out{};
@@ -154,13 +153,13 @@ struct Channel {
     Asymptotics() = default;
 
     Asymptotics(int l, real k, real r)
-        : wvfxn_out(asymptotics::h_plus{l}(k * r)), 
+        : wvfxn_out(asymptotics::h_plus{l}(k * r)),
           wvfxn_in(asymptotics::h_minus{l}(k * r)),
           wvfxn_deriv_out(asymptotics::d_dz(asymptotics::h_plus{l})(k * r)),
           wvfxn_deriv_in(asymptotics::d_dz(asymptotics::h_minus{l})(k * r)) {}
 
-    static std::vector<Asymptotics>
-    generate_asymptotics(int lmax, real k, real r) {
+    static std::vector<Asymptotics> generate_asymptotics(int lmax, real k,
+                                                         real r) {
       std::vector<Asymptotics> asym(lmax);
       for (int l = 0; l < lmax; ++l) {
         asym[l] = Asymptotics(l, k, r);
@@ -206,9 +205,8 @@ struct Channel {
   /// @param 2s+1, w/ s spin of projectile
   /// @param targ_mass [amu]
   /// @param Zt proton number of target
-  Channel(
-      real threshold, real radius, real proj_mass, int Zp, int s,
-      real targ_mass, int Zt)
+  Channel(real threshold, real radius, real proj_mass, int Zp, int s,
+          real targ_mass, int Zt)
       : threshold(threshold), radius(radius), targ_mass(targ_mass),
         proj_mass(proj_mass), Zz(Zp * Zt), s(s) {}
 };

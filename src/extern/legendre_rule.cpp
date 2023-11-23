@@ -10,25 +10,23 @@
 
 using namespace std;
 
-void cdgqf(
-    int nt, int kind, double alpha, double beta, double t[], double wts[]);
-void cgqf(
-    int nt, int kind, double alpha, double beta, double a, double b, double t[],
-    double wts[]);
-double class_matrix(
-    int kind, int m, double alpha, double beta, double aj[], double bj[]);
+void cdgqf(int nt, int kind, double alpha, double beta, double t[],
+           double wts[]);
+void cgqf(int nt, int kind, double alpha, double beta, double a, double b,
+          double t[], double wts[]);
+double class_matrix(int kind, int m, double alpha, double beta, double aj[],
+                    double bj[]);
 void imtqlx(int n, double d[], double e[], double z[]);
 void parchk(int kind, int m, double alpha, double beta);
 double r8_epsilon();
 double r8_sign(double x);
 void r8mat_write(string output_filename, int m, int n, double table[]);
 void rule_write(int order, string filename, double x[], double w[], double r[]);
-void scqf(
-    int nt, double t[], int mlt[], double wts[], int nwts, int ndx[],
-    double swts[], double st[], int kind, double alpha, double beta, double a,
-    double b);
-void sgqf(
-    int nt, double aj[], double bj[], double zemu, double t[], double wts[]);
+void scqf(int nt, double t[], int mlt[], double wts[], int nwts, int ndx[],
+          double swts[], double st[], int kind, double alpha, double beta,
+          double a, double b);
+void sgqf(int nt, double aj[], double bj[], double zemu, double t[],
+          double wts[]);
 
 std::vector<gl::zero_crossing>
 gl::generate_gauss_legendre_quadrature(int order) {
@@ -37,21 +35,22 @@ gl::generate_gauss_legendre_quadrature(int order) {
   cdgqf(order, 1, 1, 1, x, w);
   std::vector<gl::zero_crossing> quadrature(order);
   for (int i = 0; i < order; ++i) {
-    quadrature[i] = {0.5*(x[i] + 1), 0.5*w[i]};
+    quadrature[i] = {0.5 * (x[i] + 1), 0.5 * w[i]};
   }
   return quadrature;
 }
 
 //****************************************************************************80
 
-void cdgqf(
-    int nt, int kind, double alpha, double beta, double t[], double wts[])
+void cdgqf(int nt, int kind, double alpha, double beta, double t[],
+           double wts[])
 
 //****************************************************************************80
 //
 //  Purpose:
 //
-//    CDGQF computes a Gauss quadrature formula with default A, B and simple knots.
+//    CDGQF computes a Gauss quadrature formula with default A, B and simple
+//    knots.
 //
 //  Discussion:
 //
@@ -107,8 +106,8 @@ void cdgqf(
 //    Output, double WTS[NT], the weights.
 //
 {
-  double* aj;
-  double* bj;
+  double *aj;
+  double *bj;
   double zemu;
 
   parchk(kind, 2 * nt, alpha, beta);
@@ -131,9 +130,8 @@ void cdgqf(
 }
 //****************************************************************************80
 
-void cgqf(
-    int nt, int kind, double alpha, double beta, double a, double b, double t[],
-    double wts[])
+void cgqf(int nt, int kind, double alpha, double beta, double a, double b,
+          double t[], double wts[])
 
 //****************************************************************************80
 //
@@ -198,8 +196,8 @@ void cgqf(
 //
 {
   int i;
-  int* mlt;
-  int* ndx;
+  int *mlt;
+  int *ndx;
   //
   //  Compute the Gauss quadrature formula for default values of A and B.
   //
@@ -225,8 +223,8 @@ void cgqf(
 }
 //****************************************************************************80
 
-double class_matrix(
-    int kind, int m, double alpha, double beta, double aj[], double bj[])
+double class_matrix(int kind, int m, double alpha, double beta, double aj[],
+                    double bj[])
 
 //****************************************************************************80
 //
@@ -332,8 +330,7 @@ double class_matrix(
       abj = 2 * i + ab;
       bj[i - 1] = sqrt(abi * abi / (abj * abj - 1.0));
     }
-  }
-  else if (kind == 2) {
+  } else if (kind == 2) {
     zemu = pi;
 
     for (i = 0; i < m; i++) {
@@ -344,8 +341,7 @@ double class_matrix(
     for (i = 1; i < m; i++) {
       bj[i] = 0.5;
     }
-  }
-  else if (kind == 3) {
+  } else if (kind == 3) {
     ab = alpha * 2.0;
     zemu = pow(2.0, ab + 1.0) * pow(tgamma(alpha + 1.0), 2) / tgamma(ab + 2.0);
 
@@ -357,8 +353,7 @@ double class_matrix(
     for (i = 2; i <= m; i++) {
       bj[i - 1] = sqrt(i * (i + ab) / (4.0 * pow(i + alpha, 2) - 1.0));
     }
-  }
-  else if (kind == 4) {
+  } else if (kind == 4) {
     ab = alpha + beta;
     abi = 2.0 + ab;
     zemu = pow(2.0, ab + 1.0) * tgamma(alpha + 1.0) * tgamma(beta + 1.0) /
@@ -372,19 +367,17 @@ double class_matrix(
       abi = 2.0 * i + ab;
       aj[i - 1] = a2b2 / ((abi - 2.0) * abi);
       abi = abi * abi;
-      bj[i - 1] = sqrt(
-          4.0 * i * (i + alpha) * (i + beta) * (i + ab) / ((abi - 1.0) * abi));
+      bj[i - 1] = sqrt(4.0 * i * (i + alpha) * (i + beta) * (i + ab) /
+                       ((abi - 1.0) * abi));
     }
-  }
-  else if (kind == 5) {
+  } else if (kind == 5) {
     zemu = tgamma(alpha + 1.0);
 
     for (i = 1; i <= m; i++) {
       aj[i - 1] = 2.0 * i - 1.0 + alpha;
       bj[i - 1] = sqrt(i * (i + alpha));
     }
-  }
-  else if (kind == 6) {
+  } else if (kind == 6) {
     zemu = tgamma((alpha + 1.0) / 2.0);
 
     for (i = 0; i < m; i++) {
@@ -394,8 +387,7 @@ double class_matrix(
     for (i = 1; i <= m; i++) {
       bj[i - 1] = sqrt((i + alpha * (i % 2)) / 2.0);
     }
-  }
-  else if (kind == 7) {
+  } else if (kind == 7) {
     ab = alpha;
     zemu = 2.0 / (ab + 1.0);
 
@@ -408,8 +400,7 @@ double class_matrix(
       abj = 2 * i + ab;
       bj[i - 1] = sqrt(abi * abi / (abj * abj - 1.0));
     }
-  }
-  else if (kind == 8) {
+  } else if (kind == 8) {
     ab = alpha + beta;
     zemu = tgamma(alpha + 1.0) * tgamma(-(ab + 1.0)) / tgamma(-beta);
     apone = alpha + 1.0;
@@ -455,8 +446,8 @@ void imtqlx(int n, double d[], double e[], double z[])
 //
 //    It has been modified to produce the product Q' * Z, where Z is an input
 //    vector and Q is the orthogonal matrix diagonalizing the input matrix.
-//    The changes consist (essentialy) of applying the orthogonal transformations
-//    directly to Z as they are generated.
+//    The changes consist (essentialy) of applying the orthogonal
+//    transformations directly to Z as they are generated.
 //
 //  Licensing:
 //
@@ -567,8 +558,7 @@ void imtqlx(int n, double d[], double e[], double z[])
           e[i] = f * r;
           s = 1.0 / r;
           c = c * s;
-        }
-        else {
+        } else {
           s = f / g;
           r = sqrt(s * s + 1.0);
           e[i] = g * r;
@@ -776,8 +766,7 @@ double r8_sign(double x)
 
   if (x < 0.0) {
     value = -1.0;
-  }
-  else {
+  } else {
     value = 1.0;
   }
   return value;
@@ -905,10 +894,9 @@ void rule_write(int order, string filename, double x[], double w[], double r[])
 }
 //****************************************************************************80
 
-void scqf(
-    int nt, double t[], int mlt[], double wts[], int nwts, int ndx[],
-    double swts[], double st[], int kind, double alpha, double beta, double a,
-    double b)
+void scqf(int nt, double t[], int mlt[], double wts[], int nwts, int ndx[],
+          double swts[], double st[], int kind, double alpha, double beta,
+          double a, double b)
 
 //****************************************************************************80
 //
@@ -1006,8 +994,7 @@ void scqf(
     }
     shft = (a + b) / 2.0;
     slp = (b - a) / 2.0;
-  }
-  else if (kind == 2) {
+  } else if (kind == 2) {
     al = -0.5;
     be = -0.5;
     if (fabs(b - a) <= temp) {
@@ -1018,8 +1005,7 @@ void scqf(
     }
     shft = (a + b) / 2.0;
     slp = (b - a) / 2.0;
-  }
-  else if (kind == 3) {
+  } else if (kind == 3) {
     al = alpha;
     be = alpha;
     if (fabs(b - a) <= temp) {
@@ -1030,8 +1016,7 @@ void scqf(
     }
     shft = (a + b) / 2.0;
     slp = (b - a) / 2.0;
-  }
-  else if (kind == 4) {
+  } else if (kind == 4) {
     al = alpha;
     be = beta;
 
@@ -1043,8 +1028,7 @@ void scqf(
     }
     shft = (a + b) / 2.0;
     slp = (b - a) / 2.0;
-  }
-  else if (kind == 5) {
+  } else if (kind == 5) {
     if (b <= 0.0) {
       cerr << "\n";
       cerr << "SCQF - Fatal error!\n";
@@ -1055,8 +1039,7 @@ void scqf(
     slp = 1.0 / b;
     al = alpha;
     be = 0.0;
-  }
-  else if (kind == 6) {
+  } else if (kind == 6) {
     if (b <= 0.0) {
       cerr << "\n";
       cerr << "SCQF - Fatal error!\n";
@@ -1067,8 +1050,7 @@ void scqf(
     slp = 1.0 / sqrt(b);
     al = alpha;
     be = 0.0;
-  }
-  else if (kind == 7) {
+  } else if (kind == 7) {
     al = alpha;
     be = 0.0;
     if (fabs(b - a) <= temp) {
@@ -1079,8 +1061,7 @@ void scqf(
     }
     shft = (a + b) / 2.0;
     slp = (b - a) / 2.0;
-  }
-  else if (kind == 8) {
+  } else if (kind == 8) {
     if (a + b <= 0.0) {
       cerr << "\n";
       cerr << "SCQF - Fatal error!\n";
@@ -1091,8 +1072,7 @@ void scqf(
     slp = a + b;
     al = alpha;
     be = beta;
-  }
-  else if (kind == 9) {
+  } else if (kind == 9) {
     al = 0.5;
     be = 0.5;
     if (fabs(b - a) <= temp) {
@@ -1123,8 +1103,8 @@ void scqf(
 }
 //****************************************************************************80
 
-void sgqf(
-    int nt, double aj[], double bj[], double zemu, double t[], double wts[])
+void sgqf(int nt, double aj[], double bj[], double zemu, double t[],
+          double wts[])
 
 //****************************************************************************80
 //
