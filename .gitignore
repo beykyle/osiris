@@ -9,3 +9,54 @@ tmp/*
 
 # OS X
 .DS_Store
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# clang
+.clangd
+.cache/
+.clang-format
+*.profraw
+
+# misc
+# clang
+compile_commands.json
+
+# Executables
+*.exe
+*.out
+*.app
+build/
+debug/
+
+# Python
+**/__pycache__/
+dist/*
+*.egg-info/*
+
