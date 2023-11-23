@@ -147,7 +147,14 @@ Thread model: posix
 - [pybind11](https://pybind11.readthedocs.io/en/stable/index.html)
 - [xtensor-python](https://github.com/xtensor-stack/xtensor-python)
 
-It is highly recomended to use use a package, dependency and environment manager like [mamba](https://mamba.readthedocs.io/en/latest/) or [conda](https://docs.conda.io/en/latest/). Then, setting up an environment to run `osiris` with `python` is as easy as (e.g. using `mamba`):
+It is highly recomended to use use a package, dependency and environment manager like [mamba](https://mamba.readthedocs.io/en/latest/) or [conda](https://docs.conda.io/en/latest/). Then, setting up an environment to run `osiris` with `python` is as easy as (e.g. using `mamba`), from `pypi`:
+
+```zsh
+mamba create -n osirenv python cmake compilers pybind11 numpy xtensor-python
+mamba activate osirenv
+pip install osiris
+```
+Alternatively, to install for development purposes, clone the repository and create an editable install: 
 
 ```zsh
 mamba create -n osirenv python cmake compilers pybind11 numpy xtensor-python
