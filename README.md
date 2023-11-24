@@ -20,7 +20,7 @@ import osiris
 
 ```
 
-For more in-depth examples and tutorials, see `examples/`
+For more in-depth examples and tutorials, see [`examples/`](https://github.com/beykyle/osiris/tree/main/examples)
 
 CMake integration
 -----------------
