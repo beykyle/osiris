@@ -15,6 +15,11 @@ Python Installation
 Example use
 --------------
 
+```python
+import osiris
+
+```
+
 CMake integration
 -----------------
 
@@ -107,7 +112,7 @@ Thread model: posix
 - [`xtensor`](https://github.com/xtensor-stack/xtensor)
 - [`xtl`](https://github.com/xtensor-stack/xtl)
 
-### install yourself if you want to use the `python` module, `osiris`:
+### install yourself if you want to `import osiris` in `python`:
 - [`python`](https://www.python.org/) 3.7+
 - [`numpy`](https://numpy.org/)
 - [`pybind11`](https://pybind11.readthedocs.io/en/stable/index.html)
