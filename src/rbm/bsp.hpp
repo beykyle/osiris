@@ -8,7 +8,6 @@
 #include <memory>
 #include <optional>
 #include <stdexcept>
-#include <vector>
 
 #include "xtensor/xarray.hpp"
 
@@ -31,11 +30,12 @@ public:
   const Point bounds_left, bounds_right{};
 
   BinarySPTree(int depth, Point bounds_left, Point bounds_right,
-               std::vector<T> data)
-      : depth(depth--), dimensions(bounds_left.size()),
+               xt::xarray<T> data)
+      : depth(depth-1), dimensions(bounds_left.size()),
         bounds_left(bounds_left), bounds_right(bounds_right), data(data),
-        root(std::make_unique<Node>(depth--, 0, bounds_left, bounds_right, 0,
+        root(std::make_unique<Node>(depth-1, 0, bounds_left, bounds_right, 0,
                                     data.size() - 1)) {
+    if (depth < 1) {throw std::runtime_error("depth must be >= 1");}
     if (bounds_left.size() != bounds_right.size())
       throw std::runtime_error(
           "dimensions mismatch in bounds_left and bounds_right");
@@ -105,7 +105,7 @@ private:
     idx operator[](const Point &point) final;
   };
 
-  std::vector<T> data{};
+  xt::xarray<T> data{};
   std::unique_ptr<Node> root{};
   bool is_within_bounds(const Point &point) const;
 };
@@ -207,7 +207,7 @@ T &BinarySPTree<T, Point>::operator[](const Point &point) {
   if (not is_within_bounds(point)) {
     throw std::runtime_error("out of bounds");
   }
-  return data[root->operator[](point)];
+  return data(root->operator[](point));
 }
 
 template <class T, class Point>
@@ -216,7 +216,7 @@ const T &BinarySPTree<T, Point>::at(const Point &point) const {
   if (not is_within_bounds(point)) {
     throw std::runtime_error("out of bounds");
   }
-  return data.at(root->at(point));
+  return data.at(root->operator[](point));
 }
 
 template <class T, class Point>

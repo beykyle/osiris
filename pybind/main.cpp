@@ -13,6 +13,7 @@
 
 #include "solver/scatter.hpp"
 #include "potential/potential.hpp"
+#include "rbm/bsp.hpp"
 
 namespace py = pybind11;
 using namespace osiris;
@@ -27,32 +28,7 @@ auto kduq_n_from_json(std::string fpath) {
   return osiris::KD03Params<p>(j); 
 }
 
-// Examples
 
-inline double example1(xt::pyarray<double> &m)
-{
-    return m(0);
-}
-
-inline xt::pyarray<double> example2(xt::pyarray<double> &m)
-{
-    return m + 2;
-}
-
-// Readme Examples
-
-inline double readme_example1(xt::pyarray<double> &m)
-{
-    auto sines = xt::sin(m);
-    return std::accumulate(sines.cbegin(), sines.cend(), 0.0);
-}
-
-// Vectorize Examples
-
-inline double scalar_func(double i, double j)
-{
-    return std::sin(i) + std::cos(j);
-}
 
 // Python Module and Docstrings
 
@@ -68,19 +44,12 @@ PYBIND11_MODULE(osiris, m)
         .. autosummary::
            :toctree: _generate
 
-           example1
-           example2
-           readme_example1
-           vectorize_example1
+           Isotope
+           KD03ParamsNeutron
+           KD03ParamsProton
+           BinarySPTree
     )pbdoc";
 
-    m.def("example1", example1, "Return the first element of an array, of dimension at least one");
-    m.def("example2", example2, "Return the the specified array plus 2");
-
-    m.def("readme_example1", readme_example1, "Accumulate the sines of all the values of the specified array");
-
-    m.def("vectorize_example1", xt::pyvectorize(scalar_func), "Add the sine and and cosine of the two specified values");
-  
 
     py::class_<Isotope>(m, "Isotope")
     .def(
@@ -93,7 +62,7 @@ PYBIND11_MODULE(osiris, m)
     .def_readwrite("Z", &Isotope::Z)
     .def_readwrite("mass", &Isotope::mass);
 
-  py::class_<KD03Params<Proj::neutron>>(m, "KD03ParamsNeutron")
+    py::class_<KD03Params<Proj::neutron>>(m, "KD03ParamsNeutron")
     .def(py::init<>())
     .def("from_json", &kduq_n_from_json<Proj::neutron>)
     .def("build_KDUQ", &KD03Params<Proj::neutron>::build_KDUQ)
@@ -149,7 +118,7 @@ PYBIND11_MODULE(osiris, m)
     .def_readwrite("wso1_0", &KD03Params<Proj::neutron>::wso1_0)
     .def_readwrite("wso2_0", &KD03Params<Proj::neutron>::wso2_0);
   
-  py::class_<KD03Params<Proj::proton>>(m, "KD03ParamsProton")
+    py::class_<KD03Params<Proj::proton>>(m, "KD03ParamsProton")
     .def(py::init<>())
     .def("from_json", &kduq_n_from_json<Proj::proton>)
     .def("build_KDUQ", &KD03Params<Proj::proton>::build_KDUQ)
@@ -204,4 +173,13 @@ PYBIND11_MODULE(osiris, m)
     .def_readwrite("vso2_0", &KD03Params<Proj::proton>::vso2_0)
     .def_readwrite("wso1_0", &KD03Params<Proj::proton>::wso1_0)
     .def_readwrite("wso2_0", &KD03Params<Proj::proton>::wso2_0);
+
+    py::class_<BinarySPTree<int, xt::pyarray<real>>>(m, "BinarySPTree")
+    .def(py::init<int, xt::pyarray<real>, xt::pyarray<real>, xt::pyarray<int>>())
+    .def_readonly("depth", &BinarySPTree<int, xt::pyarray<real>>::depth)
+    .def_readonly("dimensions", &BinarySPTree<int, xt::pyarray<real>>::dimensions)
+    .def_readonly("bounds_left", &BinarySPTree<int, xt::pyarray<real>>::bounds_left)
+    .def_readonly("bounds_right", &BinarySPTree<int, xt::pyarray<real>>::bounds_right)
+    .def("__call__", &BinarySPTree<int, xt::pyarray<real>>::operator[])
+    .def("at", &BinarySPTree<int, xt::pyarray<real>>::at);
 }
