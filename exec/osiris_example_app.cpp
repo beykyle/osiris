@@ -12,7 +12,8 @@
 #include <ios>
 #include <iostream>
 
-// this file is a loose collection of examples of things you can do with this library
+// this file is a loose collection of examples of things you can do with this
+// library
 
 // nice shorthand
 constexpr auto n = osiris::Proj::neutron;
@@ -52,7 +53,7 @@ void print_potential_vals() {
           << "\t";
   out_kd << "E"
          << "\t";
-  for (const auto& [Z, A] : isotopes) {
+  for (const auto &[Z, A] : isotopes) {
     out_wlh << Z << "_" << A << "\t";
     out_kd << Z << "_" << A << "\t";
   }
@@ -66,7 +67,7 @@ void print_potential_vals() {
     out_kd << std::scientific << std::setprecision(5) << erg << "\t";
 
     for (int i = 0; i < niso; ++i) {
-      const auto& [Z, A] = isotopes[i];
+      const auto &[Z, A] = isotopes[i];
 
       out_wlh << std::scientific << std::setprecision(5)
               << wlh_mean.cmpl_surf_V(Z, A, erg) << "\t";
@@ -78,4 +79,7 @@ void print_potential_vals() {
   }
 }
 
-int main(int, char**) { return 0; };
+int main(int, char **) {
+  print_potential_vals();
+  return 0;
+};
