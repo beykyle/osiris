@@ -140,7 +140,12 @@ pip install -e .
 
 Parallel execution with MPI
 ----------------------------
+```python
+import osiris
+import mpi4py
+```
 
+Using [`ipyparallel`](https://ipyparallel.readthedocs.io/en/latest/), notebooks can be run with a parallel backend.
 
 Windows runtime requirements
 ----------------------------
