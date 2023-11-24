@@ -3,6 +3,7 @@
 
 #include <complex>
 #include <vector>
+#include <xtensor/xview.hpp>
 
 namespace osiris {
 using real = double;
@@ -19,6 +20,17 @@ template <class T> struct is_std_vector {
 template <class T> struct is_std_vector<std::vector<T>> {
   static const bool value = true;
 };
+
+namespace detail {
+  template<class T>
+  constexpr static auto get_range() {
+    auto x = T{};
+    return xt::view(x, xt::range(0,0));
+  }
+}
+
+template<class T>
+using ViewType = decltype( detail::get_range<T>() );
 
 } // namespace osiris
 
