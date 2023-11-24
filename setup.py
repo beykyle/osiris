@@ -17,6 +17,7 @@ PLAT_TO_CMAKE = {
     "win-arm64": "ARM64",
 }
 
+
 # A CMakeExtension needs a sourcedir instead of a file list.
 # The name must be the _single_ output extension from the CMake build.
 # If you need multiple extensions, see scikit-build.
@@ -39,8 +40,8 @@ class CMakeBuild(build_ext):
         cfg = "Debug" if debug else "Release"
 
         cmake_generator = os.environ.get("CMAKE_GENERATOR", "")
-        libdir = sysconfig.get_config_var('LIBDIR')
-        includedir = sysconfig.get_path('include')
+        libdir = sysconfig.get_config_var("LIBDIR")
+        includedir = sysconfig.get_path("include")
 
         print(libdir)
         print(includedir)
@@ -52,7 +53,7 @@ class CMakeBuild(build_ext):
             f"-DPYTHON_INCLUDE_DIR={includedir}",
             f"-DPYTHON_LIBRARY={libdir}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
-            f"-DBUILD_PY_MODULE=On"
+            f"-DBUILD_PY_MODULE=On",
         ]
         build_args = []
         # Adding CMake arguments set as environment variable
@@ -83,7 +84,6 @@ class CMakeBuild(build_ext):
                     pass
 
         else:
-
             # Single config generators are handled "normally"
             single_config = any(x in cmake_generator for x in {"NMake", "Ninja"})
 
@@ -128,25 +128,23 @@ class CMakeBuild(build_ext):
         subprocess.run(
             ["cmake", "--build", "."] + build_args, cwd=build_temp, check=True
         )
-        subprocess.run(
-            ["make", "test"], cwd=build_temp, check=True
-        )
+        subprocess.run(["make", "test"], cwd=build_temp, check=True)
 
-__version__ = '0.0.1'
+
+__version__ = "0.0.1"
 
 setup(
-    name='osiris',
+    name="osiris",
     version=__version__,
-    author='Kyle Beyer',
-    author_email='beykyle@umich.edu',
-    url='https://github.com/beykyle/osiris',
-    description= 'Optical model ScatterIng & ReactIon Software (OSIRIS)',
-    long_description='',
+    author="Kyle Beyer",
+    author_email="beykyle@umich.edu",
+    url="https://github.com/beykyle/osiris",
+    description="Optical model ScatterIng & ReactIon Software (OSIRIS)",
+    long_description="",
     ext_modules=[CMakeExtension("osiris")],
-    install_requires=['pybind11>=2.0.1', 'numpy'],
+    install_requires=["pybind11>=2.0.1", "numpy"],
     extras_require={"test": ["pytest>=6.0"]},
     python_requires=">=3.7",
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
 )
-
