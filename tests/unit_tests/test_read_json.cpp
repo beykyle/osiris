@@ -18,9 +18,8 @@ TEST_CASE("Read KD json params from file") {
     // built in default
     const auto kdn_def = KD03Params<Proj::neutron>();
 
-    REQUIRE(
-        kdn.real_cent_r(66, 156, 189.23) ==
-        kdn_def.real_cent_r(66, 156, 189.23));
+    REQUIRE(kdn.real_cent_r(66, 156, 189.23) ==
+            kdn_def.real_cent_r(66, 156, 189.23));
   }
 
   SECTION("neutron") {
@@ -33,9 +32,8 @@ TEST_CASE("Read KD json params from file") {
     // built in default
     const auto kdn_def = KD03Params<Proj::proton>();
 
-    REQUIRE(
-        kdn.real_cent_r(66, 156, 189.23) ==
-        kdn_def.real_cent_r(66, 156, 189.23));
+    REQUIRE(kdn.real_cent_r(66, 156, 189.23) ==
+            kdn_def.real_cent_r(66, 156, 189.23));
   }
 }
 
@@ -51,9 +49,8 @@ TEST_CASE("Read CH json params from file") {
     // built in default
     const auto chn_def = CH89Params<Proj::neutron>();
 
-    REQUIRE(
-        chn.real_cent_r(66, 156, 189.23) ==
-        chn_def.real_cent_r(66, 156, 189.23));
+    REQUIRE(chn.real_cent_r(66, 156, 189.23) ==
+            chn_def.real_cent_r(66, 156, 189.23));
   }
 
   SECTION("proton") {
@@ -66,9 +63,8 @@ TEST_CASE("Read CH json params from file") {
     // built in default
     const auto chn_def = CH89Params<Proj::proton>();
 
-    REQUIRE(
-        chn.real_cent_r(66, 156, 189.23) ==
-        chn_def.real_cent_r(66, 156, 189.23));
+    REQUIRE(chn.real_cent_r(66, 156, 189.23) ==
+            chn_def.real_cent_r(66, 156, 189.23));
   }
 }
 
@@ -84,9 +80,8 @@ TEST_CASE("Read WLH json params from file") {
 
     const auto wlh_def = WLH21Params<Proj::neutron>();
 
-    REQUIRE(
-        wlh.real_cent_r(66, 156, 189.23) ==
-        wlh_def.real_cent_r(66, 156, 189.23));
+    REQUIRE(wlh.real_cent_r(66, 156, 189.23) ==
+            wlh_def.real_cent_r(66, 156, 189.23));
   }
 
   SECTION("proton") {
@@ -99,8 +94,7 @@ TEST_CASE("Read WLH json params from file") {
 
     const auto wlh_def = WLH21Params<Proj::proton>();
 
-    REQUIRE(
-        wlh.real_cent_r(66, 156, 189.23) ==
-        wlh_def.real_cent_r(66, 156, 189.23));
+    REQUIRE(wlh.real_cent_r(66, 156, 189.23) ==
+            wlh_def.real_cent_r(66, 156, 189.23));
   }
 }

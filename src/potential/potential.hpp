@@ -44,7 +44,8 @@ template <class T> struct WoodsSaxon : public Potential<T> {
     auto V = params(0);
     auto R = params(1);
     auto a = params(2);
-    if ( fabs(a) < 1e-12  ) return 0;
+    if (fabs(a) < 1e-12)
+      return 0;
     return V / (1. + exp((r - R) / a));
   };
 };
@@ -58,7 +59,8 @@ template <class T> struct DerivWoodsSaxon : public Potential<T> {
     auto V = params(0);
     auto R = params(1);
     auto a = params(2);
-    if ( fabs(a) < 1e-12  ) return 0;
+    if (fabs(a) < 1e-12)
+      return 0;
     const auto y = exp((r - R) / a);
     return -V / a * (y / ((1. + y) * (1. + y)));
   };
@@ -127,20 +129,22 @@ template <class T> struct SphereWell : public Potential<T> {
 template <class T> struct OMP : public Potential<T> {
   using View = ViewType<T>;
   real l_dot_s{};
-  
-  OMP(real l_dot_s): l_dot_s(l_dot_s) {};
-  
+
+  OMP(real l_dot_s) : l_dot_s(l_dot_s){};
+
   cmpl operator()(real r, T params) const final {
     assert(params.size() == 18);
 
-    return cmpl{
-       WoodsSaxon<View>{}(r, xt::view(params, xt::range(0, 3))) 
-    +  DerivWoodsSaxon<View>{}(r, xt::view(params, xt::range(6, 9)))
-    +  Thomas<View>{}(r, xt::view(params, xt::range(12, 15))) * l_dot_s
-    + WoodsSaxon<View>{}(r, xt::view(params, xt::range(3, 6))) * constants::i
-    +  DerivWoodsSaxon<View>{}(r, xt::view(params, xt::range(9, 12))) * constants::i
-    +  Thomas<View>{}(r, xt::view(params, xt::range(15, _))) * l_dot_s * constants::i
-    };
+    return cmpl{WoodsSaxon<View>{}(r, xt::view(params, xt::range(0, 3))) +
+                DerivWoodsSaxon<View>{}(r, xt::view(params, xt::range(6, 9))) +
+                Thomas<View>{}(r, xt::view(params, xt::range(12, 15))) *
+                    l_dot_s +
+                WoodsSaxon<View>{}(r, xt::view(params, xt::range(3, 6))) *
+                    constants::i +
+                DerivWoodsSaxon<View>{}(r, xt::view(params, xt::range(9, 12))) *
+                    constants::i +
+                Thomas<View>{}(r, xt::view(params, xt::range(15, _))) *
+                    l_dot_s * constants::i};
   }
 };
 
@@ -165,13 +169,12 @@ xt::xarray<real> get_global_terms(Isotope iso, real erg_cms,
 /// Perey, F., and B. Buck.
 /// "A non-local potential model for the scattering of neutrons by nuclei."
 /// Nuclear Physics 32 (1962): 353-380.
-template <class T>
-struct PereyBuck : public NonlocalPotential<T> {
+template <class T> struct PereyBuck : public NonlocalPotential<T> {
   std::unique_ptr<Potential<ViewType<T>>> local_potential;
   Gaussian<T> non_local_factor;
 
   PereyBuck(std::unique_ptr<Potential<ViewType<T>>> local_potential)
-    : local_potential(std::move(local_potential)) {};
+      : local_potential(std::move(local_potential)){};
 
   cmpl operator()(real r, real rp, T params) const final {
     return local_potential->operator()(r, xt::view(params, 0)) *
