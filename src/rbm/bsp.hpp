@@ -10,15 +10,17 @@
 #include <stdexcept>
 #include <vector>
 
+#include "xtensor/xarray.hpp"
+
 namespace osiris {
 
 ///@brief simple generic container that paritions a hyber-box of arbitrary
-///dimensional space into nested binary sub-volumes, down to a fixed depth,
+/// dimensional space into nested binary sub-volumes, down to a fixed depth,
 /// associating a T instance with each of the deepest sub-volumes. Splits along
 /// dimensions in order they're provided by bounds_left and right, cycling back
 /// the first dimension if/when the number of layers exceeds the number of
 /// dimensions.
-template <class T, class Point = std::vector<real>> class BinarySPTree {
+template <class T, class Point = xt::xarray<real>> class BinarySPTree {
 public:
   /// @brief number of layers, number of partitions goes as 2^depth, partition
   /// volumes go with (1/2)^depth
@@ -177,7 +179,7 @@ BinarySPTree<T, Point>::Node::Node(int depth, int split_dimension,
 template <class T, class Point>
 typename BinarySPTree<T, Point>::idx
 BinarySPTree<T, Point>::Node::operator[](const Point &point) {
-  if (point[split_dimension] >= bound)
+  if (point(split_dimension) >= bound)
     return right->operator[](point);
   return left->operator[](point);
 }
@@ -194,7 +196,7 @@ BinarySPTree<T, Point>::Leaf::Leaf(int split_dimension, Point bounds_left,
 template <class T, class Point>
 typename BinarySPTree<T, Point>::idx
 BinarySPTree<T, Point>::Leaf::operator[](const Point &point) {
-  if (point[this->split_dimension] >= this->bound)
+  if (point(this->split_dimension) >= this->bound)
     return idx_right;
   return idx_left;
 }
@@ -221,7 +223,7 @@ template <class T, class Point>
 bool BinarySPTree<T, Point>::is_within_bounds(const Point &point) const {
   assert(point.size() == dimensions);
   for (int i = 0; i < dimensions; ++i) {
-    if (point[i] < bounds_left[i] or point[i] > bounds_right[i])
+    if (point(i) < bounds_left(i) or point(i) > bounds_right(i))
       return false;
   }
   return true;
