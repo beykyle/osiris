@@ -1,7 +1,6 @@
-osiris
+OSIRIS   (/oʊˈsaɪərɨs/)
 ==============
-
-Optical model Scatterng & Reacton Software (OSRS)  (/oʊˈsaɪərɨs/)
+OSRS: Optical model Scatterng & Reacton Software 
 
 A fast, modern nuclear reaction code with a `python` interface using [xtensor-python](https://github.com/xtensor-stack/xtensor-python).
 
