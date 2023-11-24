@@ -8,7 +8,7 @@ A fast, modern nuclear reaction code with a `python` interface.
 Python Installation
 ------------
 
-`osiris` is available at [pypi.org/project/osiris](https://pypi.org/project/osiris):
+`osiris` is available at [pypi.org/project/osiris]():
 
  - `pip install osiris`
 
