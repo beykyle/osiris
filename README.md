@@ -3,12 +3,12 @@ osiris
 
 Optical model Scatterng & Reacton Software (OSRS)  (/oʊˈsaɪərɨs/)
 
-A fast, modern nuclear reaction code with a `python` interface.
+A fast, modern nuclear reaction code with a `python` interface using [xtensor-python](https://github.com/xtensor-stack/xtensor-python).
 
 Python Installation
 ------------
 
-`osiris` is available at [pypi.org/project/osiris]():
+`osiris` is available at [pypi.org/project/]():
 
  - `pip install osiris`
 
@@ -18,7 +18,7 @@ Example use
 CMake integration
 -----------------
 
-`osiris` supports CMake integration using [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) with static linkage. Add the following to your `CMakeLists.txt`:
+`osiris` supports CMake integration using [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html). Add the following to your `CMakeLists.txt`:
 
 ```cmake
 FetchContent_Declare(
@@ -52,15 +52,11 @@ Building the documentation
 --------------------------
 
 ### python documentation
+From the `docs/` directory:
 
-Documentation for the example project is generated using Sphinx. Sphinx has the
-ability to automatically inspect the signatures and documentation strings in
-the extension module to generate beautiful documentation in a variety formats.
-The following command generates HTML-based reference documentation; for other
-formats please refer to the Sphinx manual:
-
- - `osiris/docs`
- - `make html`
+```
+make html
+```
 
 ### c++ documentation
 
@@ -97,7 +93,7 @@ Dependencies
 -----------------
 
 - [CMake](https://cmake.org/) >= 3.18
-- a modern compiler. This was tested and built with:
+- a modern `c++` compiler and tool chain. This was tested and built with:
 
 ```
 clang version 15.0.7 (https://github.com/conda-forge/clangdev-feedstock fc523913ae327dfa0a91bb2b45a36c810e0f55d0)
@@ -106,17 +102,17 @@ Thread model: posix
 ```
 
 ### handled by `CMake` (you don't have to do anything):
-- [nlohmann/json](https://github.com/nlohmann/json)
-- [Catch2](https://catch2.docsforge.com/)
-- [xtensor](https://github.com/xtensor-stack/xtensor)
-- [xtl](https://github.com/xtensor-stack/xtl)
+- [`nlohmann/json`](https://github.com/nlohmann/json)
+- [`Catch2`](https://catch2.docsforge.com/)
+- [`xtensor`](https://github.com/xtensor-stack/xtensor)
+- [`xtl`](https://github.com/xtensor-stack/xtl)
 
 ### install yourself if you want to use the `python` module, `osiris`:
-- [python](https://www.python.org/) 3.7+
-- [numpy](https://numpy.org/)
-- [pybind11](https://pybind11.readthedocs.io/en/stable/index.html)
-- [xtensor-python](https://github.com/xtensor-stack/xtensor-python)
-- [pytest](https://docs.pytest.org/en/7.4.x/)
+- [`python`](https://www.python.org/) 3.7+
+- [`numpy`](https://numpy.org/)
+- [`pybind11`](https://pybind11.readthedocs.io/en/stable/index.html)
+- [`xtensor-python`](https://github.com/xtensor-stack/xtensor-python)
+- [`pytest`](https://docs.pytest.org/en/7.4.x/) to run the `python` unit tests
 
 It is highly recomended to use use a package, dependency and environment manager like [mamba](https://mamba.readthedocs.io/en/latest/) or [conda](https://docs.conda.io/en/latest/). Then, setting up an environment to run `osiris` with `python` is as easy as (e.g. using `mamba`), from `pypi`:
 
