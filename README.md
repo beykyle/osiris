@@ -1,4 +1,4 @@
-[![CMake](https://github.com/beykyle/osiris/actions/workflows/cmake.yml/badge.svg)](https://github.com/beykyle/osiris/actions/workflows/cmake.yml)
+[![CMake](https://github.com/beykyle/osiris/actions/workflows/cmake.yml/badge.svg)](https://github.com/beykyle/osiris/actions/workflows/cmake.yml) [![Python package](https://github.com/beykyle/osiris/actions/workflows/python-package.yml/badge.svg)](https://github.com/beykyle/osiris/actions/workflows/python-package.yml)
 
 OSIRIS   (/oʊˈsaɪərɨs/)
 ==============
