@@ -20,6 +20,8 @@ import osiris
 
 ```
 
+For more in-depth examples and tutorials, see `examples/`
+
 CMake integration
 -----------------
 
