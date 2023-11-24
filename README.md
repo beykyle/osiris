@@ -1,14 +1,9 @@
 osiris
 ==============
 
-Optical model ScatterIng & ReactIon Software (OSIRIS)
+Optical model Scatterng & Reacton Software (OSRS)
 
 A fast, modern nuclear reaction code with a `python` interface.
-
-This is a library for nuclear reaction calculations, with a primary focus on nucleon-nuclear scattering using optical potentials. It is equipped with an R-Matrix solver on a Lagrange-Legendre mesh for calculating scattering matrix elements and cross sections. Applications include calibration and uncertainty quantification of optical model parameters, Hauser-Feshbach calculations of compound-nuclei, and more. Also included is a module for running the online stage of a trained reduced basis emulator over wide regions of parameter space using binary tangent space partitioning. 
-
-The goals of this project are to provide a fast, flexible and high-fidelity solver for nuclear reactions, with a focus on model order reduction and uncertainty quantification. It is meant to be readable, user-friendly, and developed with modern software tools. It can be included as a ``c++`` library using `CMake`, or it can be built as a python module with `pip`. To contribute, send me an email a at [beykyle@umich.edu](mailto:beykyle@umich.edu) and I'll add you as a contributor!
-
 
 Python Installation
 ------------
