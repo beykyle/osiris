@@ -1,3 +1,5 @@
+[![CMake](https://github.com/beykyle/osiris/actions/workflows/cmake.yml/badge.svg)](https://github.com/beykyle/osiris/actions/workflows/cmake.yml)
+
 OSIRIS   (/oʊˈsaɪərɨs/)
 ==============
 OSRS: Optical model Scatterng & Reacton Software 
