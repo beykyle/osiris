@@ -31,6 +31,20 @@ auto kduq_n_from_json(std::string fpath) {
   return osiris::KD03Params<p>(j); 
 }
 
+template<typename T>
+void declare_bsp_tree(py::module &m, std::string&& typestr) {
+    using Class = BinarySPTree<T, xt::pyarray<real>>;
+    std::string pyclass_name = std::string("BinarySPTree_") + typestr;
+    py::class_<Class>(m, pyclass_name.c_str(), py::buffer_protocol(), py::dynamic_attr())
+    .def(py::init<int, xt::pyarray<real>, xt::pyarray<real>, xt::pyarray<T>>())
+    .def_readonly("depth", &Class::depth)
+    .def_readonly("dimensions", &Class::dimensions)
+    .def_readonly("bounds_left", &Class::bounds_left)
+    .def_readonly("bounds_right", &Class::bounds_right)
+    .def("__call__", &Class::operator[])
+    .def("at", &Class::at);
+}
+
 // Python Module and Docstrings
 PYBIND11_MODULE(osiris_core, m)
 {
@@ -174,15 +188,9 @@ PYBIND11_MODULE(osiris_core, m)
     .def_readwrite("wso1_0", &KD03Params<Proj::proton>::wso1_0)
     .def_readwrite("wso2_0", &KD03Params<Proj::proton>::wso2_0);
 
-    py::class_<BinarySPTree<int, xt::pyarray<real>>>(m, "BinarySPTree")
-    .def(py::init<int, xt::pyarray<real>, xt::pyarray<real>, xt::pyarray<int>>())
-    .def_readonly("depth", &BinarySPTree<int, xt::pyarray<real>>::depth)
-    .def_readonly("dimensions", &BinarySPTree<int, xt::pyarray<real>>::dimensions)
-    .def_readonly("bounds_left", &BinarySPTree<int, xt::pyarray<real>>::bounds_left)
-    .def_readonly("bounds_right", &BinarySPTree<int, xt::pyarray<real>>::bounds_right)
-    .def("__call__", &BinarySPTree<int, xt::pyarray<real>>::operator[])
-    .def("at", &BinarySPTree<int, xt::pyarray<real>>::at);
-
+    declare_bsp_tree<real>(m , std::string{"double"});
+    declare_bsp_tree<int>(m , std::string{"int"});
+    
     #ifdef VERSION_INFO
     m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
     #else
