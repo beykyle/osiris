@@ -9,7 +9,7 @@
 #include <optional>
 #include <stdexcept>
 
-#include "xtensor/xarray.hpp"
+#include "xtensor/xtensor.hpp"
 
 namespace osiris {
 
@@ -19,7 +19,7 @@ namespace osiris {
 /// dimensions in order they're provided by bounds_left and right, cycling back
 /// the first dimension if/when the number of layers exceeds the number of
 /// dimensions.
-template <class T, class Point = xt::xarray<real>> class BinarySPTree {
+template <class T, class Point = xt::xtensor<real,1>> class BinarySPTree {
 public:
   /// @brief number of layers, number of partitions goes as 2^depth, partition
   /// volumes go with (1/2)^depth
@@ -30,7 +30,7 @@ public:
   const Point bounds_left, bounds_right{};
 
   BinarySPTree(int depth, Point bounds_left, Point bounds_right,
-               xt::xarray<T> data)
+               xt::xtensor<T,1> data)
       : depth(depth - 1), dimensions(bounds_left.size()),
         bounds_left(bounds_left), bounds_right(bounds_right), data(data),
         root(std::make_unique<Node>(depth - 1, 0, bounds_left, bounds_right, 0,
@@ -107,7 +107,7 @@ private:
     idx operator[](const Point &point) final;
   };
 
-  xt::xarray<T> data{};
+  xt::xtensor<T,1> data{};
   std::unique_ptr<Node> root{};
   bool is_within_bounds(const Point &point) const;
 };

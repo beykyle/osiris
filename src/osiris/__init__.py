@@ -6,9 +6,9 @@ from .osiris_core import (
     Isotope,
     KD03ParamsNeutron,
     KD03ParamsProton,
-    BinarySPTree_int,
-    BinarySPTree_double,
 )
+
+from .bsp import BinarySPTree
 
 __all__ = [
     "__doc__",
@@ -16,6 +16,5 @@ __all__ = [
     "Isotope",
     "KD03ParamsNeutron",
     "KD03ParamsProton",
-    "BinarySPTree_int",
-    "BinarySPTree_double",
+    "BinarySPTree"
 ]

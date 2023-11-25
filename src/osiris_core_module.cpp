@@ -183,7 +183,6 @@ PYBIND11_MODULE(osiris_core, m) {
       .def_readwrite("wso1_0", &KD03Params<Proj::proton>::wso1_0)
       .def_readwrite("wso2_0", &KD03Params<Proj::proton>::wso2_0);
 
-  declare_bsp_tree<real>(m, std::string{"double"});
   declare_bsp_tree<int>(m, std::string{"int"});
 
 #ifdef VERSION_INFO
