@@ -8,7 +8,6 @@ from .osiris_core import (
     KD03ParamsProton,
     BinarySPTree_int,
     BinarySPTree_double,
-
 )
 
 __all__ = [
