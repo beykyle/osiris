@@ -2,6 +2,9 @@
 #include "xtensor/xmath.hpp"
 #include "xtensor/xarray.hpp"
 
+#define STRINGIFY(x) #x
+#define MACRO_STRINGIFY(x) STRINGIFY(x)
+
 #define FORCE_IMPORT_ARRAY
 #include "xtensor-python/pyarray.hpp"
 #include "xtensor-python/pyvectorize.hpp"
@@ -28,11 +31,8 @@ auto kduq_n_from_json(std::string fpath) {
   return osiris::KD03Params<p>(j); 
 }
 
-
-
 // Python Module and Docstrings
-
-PYBIND11_MODULE(osiris, m)
+PYBIND11_MODULE(osiris_core, m)
 {
     xt::import_numpy();
 
@@ -182,4 +182,10 @@ PYBIND11_MODULE(osiris, m)
     .def_readonly("bounds_right", &BinarySPTree<int, xt::pyarray<real>>::bounds_right)
     .def("__call__", &BinarySPTree<int, xt::pyarray<real>>::operator[])
     .def("at", &BinarySPTree<int, xt::pyarray<real>>::at);
+
+    #ifdef VERSION_INFO
+    m.attr("__version__") = MACRO_STRINGIFY(VERSION_INFO);
+    #else
+    m.attr("__version__") = "dev";
+    #endif
 }

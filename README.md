@@ -30,7 +30,8 @@ CMake integration
 
 ```cmake
 FetchContent_Declare(
-  omplib GIT_REPOSITORY https://github.com/beykyle/osiris.git
+  osiris 
+  GIT_REPOSITORY https://github.com/beykyle/osiris.git
   GIT_TAG "origin/main"
   )
 FetchContent_MakeAvailable(osiris_lib)
@@ -46,7 +47,7 @@ Standalone executable
 
 ```zsh
 git clone git@github.com:beykyle/osiris.git
-cd omplib
+cd osiris
 mkdir build
 cd build 
 cmake -DCMAKE_BUILD_TYPE=Release .. 

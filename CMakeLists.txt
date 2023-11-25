@@ -1,14 +1,9 @@
-# cliutils.gitlab.io/modern-cmake/chapters/basics.html
-# https://docs.travis-ci.com/user/languages/cpp/#cmake
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.15...3.26)
 
-# TODO this is a bit hacky
-if(DEFINED PROJECT_NAME)
- set(SUBPROJECT ON)
-else()
-  set(SUBPROJECT OFF)
-  project("osiris" VERSION 0.1 LANGUAGES CXX)
-endif()
+project(
+  ${SKBUILD_PROJECT_NAME}
+  VERSION ${SKBUILD_PROJECT_VERSION}
+  LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 # valloric.github.io/YouCompleteMe/#c-family-semantic-completion
@@ -60,22 +55,17 @@ Message("fetching xtensor-stack/xtensor")
 FetchContent_MakeAvailable(xtensor)
 
 # directories
-add_subdirectory(src)
+add_subdirectory(src/osiris_lib)
 add_subdirectory(tests/unit_tests)
+
 if (NOT SUBPROJECT)
   add_subdirectory(exec)
 endif()
 
 option(BUILD_PY_MODULE "BUILD_PY_MODULE" OFF)
 if(BUILD_PY_MODULE)
-
-  find_package(Python REQUIRED  COMPONENTS Interpreter Development NumPy)
-  find_package(pybind11 REQUIRED CONFIG)
-  find_package(xtensor-python REQUIRED)
-
   if(MSVC)
     set(CMAKE_EXE_LINKER_FLAGS /MANIFEST:NO)
   endif()
-
-  add_subdirectory(pybind)
+  add_subdirectory(src)
 endif()

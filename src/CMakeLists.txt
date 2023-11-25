@@ -1,10 +1,18 @@
-file(GLOB_RECURSE SRC_CPP_FILES "*.cpp")
+find_package(Python REQUIRED COMPONENTS Interpreter Development.Module NumPy)
+find_package(pybind11 CONFIG REQUIRED)
+FetchContent_Declare(
+  xtensor-python
+  GIT_REPOSITORY https://github.com/xtensor-stack/xtensor-python.git
+  GIT_TAG 0.26.1
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE)
+Message("fetching xtensor-stack/xtensor-python")
+FetchContent_MakeAvailable(xtensor-python)
 
-add_library(osiris_lib ${SRC_CPP_FILES})
-target_include_directories(osiris_lib PUBLIC ${CMAKE_SOURCE_DIR}/src)
+python_add_library(osiris_core MODULE osiris_core_module.cpp WITH_SOABI)
+target_link_libraries(osiris_core PUBLIC pybind11::headers xtensor-python Python::NumPy osiris_lib)
+target_include_directories(osiris_core PUBLIC ${CMAKE_SOURCE_DIR}/src/osiris_lib)
+target_compile_definitions(osiris_core PRIVATE VERSION_INFO=${PROJECT_VERSION})
 
-target_include_directories(osiris_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries(osiris_lib PUBLIC nlohmann_json::nlohmann_json ${CMAKE_THREAD_LIBS_INIT} xtensor)
-
-set_target_properties(osiris_lib PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+install(TARGETS osiris_core DESTINATION osiris)
