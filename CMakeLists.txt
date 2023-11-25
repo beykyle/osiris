@@ -54,6 +54,15 @@ FetchContent_Declare(
 Message("fetching xtensor-stack/xtensor")
 FetchContent_MakeAvailable(xtensor)
 
+FetchContent_Declare(
+  xtensor-blas
+  GIT_REPOSITORY https://github.com/xtensor-stack/xtensor-blas.git
+  GIT_TAG 0.20.0
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE)
+Message("fetching xtensor-stack/xtensor-blas")
+FetchContent_MakeAvailable(xtensor-blas)
+
 # directories
 add_subdirectory(src/osiris_lib)
 add_subdirectory(tests/unit_tests)
