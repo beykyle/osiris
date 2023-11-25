@@ -16,5 +16,5 @@ __all__ = [
     "Isotope",
     "KD03ParamsNeutron",
     "KD03ParamsProton",
-    "BinarySPTree"
+    "BinarySPTree",
 ]
