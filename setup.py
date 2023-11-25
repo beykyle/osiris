@@ -43,17 +43,15 @@ class CMakeBuild(build_ext):
         libdir = sysconfig.get_config_var("LIBDIR")
         includedir = sysconfig.get_path("include")
 
-        print(libdir)
-        print(includedir)
-
         # Set Python_EXECUTABLE instead if you use PYBIND11_FINDPYTHON
         cmake_args = [
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}{os.sep}",
-            f"-DPYTHON_EXECUTABLE={sys.executable}",
-            f"-DPYTHON_INCLUDE_DIR={includedir}",
-            f"-DPYTHON_LIBRARY={libdir}",
+            f"-DPython3_EXECUTABLE={sys.executable}",
+            f"-DPython_EXECUTABLE={sys.executable}",
+            f"-DPython_INCLUDE_DIR={includedir}",
+            f"-DPython_LIBRARY={libdir}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
-            f"-DBUILD_PY_MODULE=On",
+            "-DBUILD_PY_MODULE=On",
         ]
         build_args = []
         # Adding CMake arguments set as environment variable
