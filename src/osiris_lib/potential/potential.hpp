@@ -149,8 +149,8 @@ template <class T> struct OMP : public Potential<T> {
 };
 
 template <class GlobalParamsOMP>
-xt::xarray<real> get_global_terms(Isotope iso, real erg_cms,
-                                  const GlobalParamsOMP &p) {
+xt::xtensor<real, 1> get_global_terms(Isotope iso, real erg_cms,
+                                      const GlobalParamsOMP &p) {
   const auto A = iso.A;
   const auto Z = iso.Z;
   return {p.real_cent_V(Z, A, erg_cms), p.real_cent_r(Z, A, erg_cms),

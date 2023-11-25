@@ -31,11 +31,13 @@ public:
 
   BinarySPTree(int depth, Point bounds_left, Point bounds_right,
                xt::xarray<T> data)
-      : depth(depth-1), dimensions(bounds_left.size()),
+      : depth(depth - 1), dimensions(bounds_left.size()),
         bounds_left(bounds_left), bounds_right(bounds_right), data(data),
-        root(std::make_unique<Node>(depth-1, 0, bounds_left, bounds_right, 0,
+        root(std::make_unique<Node>(depth - 1, 0, bounds_left, bounds_right, 0,
                                     data.size() - 1)) {
-    if (depth < 1) {throw std::runtime_error("depth must be >= 1");}
+    if (depth < 1) {
+      throw std::runtime_error("depth must be >= 1");
+    }
     if (bounds_left.size() != bounds_right.size())
       throw std::runtime_error(
           "dimensions mismatch in bounds_left and bounds_right");

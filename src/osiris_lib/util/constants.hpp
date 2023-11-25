@@ -16,6 +16,8 @@ constexpr static real m_pi = 139.57061;
 constexpr static real hbar = 6.58212196e-22;
 /// @brief zoom fast light speed [fm/s]
 constexpr static real c = 2.99792458e+23;
+/// @brief more useful than hbar or c alone, [Mev fm]
+constexpr static real hbarc = 197.3269804;
 /// @brief sqrt(-1)
 constexpr static cmpl i = 1i;
 
