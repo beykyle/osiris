@@ -2,16 +2,16 @@
 
 OSIRIS   (/oʊˈsaɪərɨs/)
 ==============
-OSRS: Optical model Scatterng & Reacton Software 
+Optical model Scattering & Reaction Software 
 
-A fast, modern nuclear reaction code with a `python` interface using [xtensor-python](https://github.com/xtensor-stack/xtensor-python), built for uncertainty quantificaiton and model order reduction of parametric nucleon-nuclear interactions.
+A fast, modern nuclear reaction code with a `python` interface using [xtensor-python](https://github.com/xtensor-stack/xtensor-python), built for uncertainty quantificaiton and model order reduction of parametric nucleon-nuclear interactions. Contains two main components; a `c++` library `osiris_lib` containing the core solvers and physics functionality, and a `python` front end; `osiris`.
 
 Python Installation
 ------------
 
 `osiris` is available at [pypi.org/project/osiris-py](https://pypi.org/project/osiris-py):
 
- - `pip install osiris-pu`
+ - `pip install osiris-py`
 
 Example use
 --------------
@@ -67,7 +67,7 @@ From the `docs/` directory:
 make html
 ```
 
-### c++ documentation
+### `c++` documentation
 
 Following a build, run:
 
@@ -80,7 +80,7 @@ from the `build/` directory.
 Running the tests
 -----------------
 
-### python unit tests
+### `osiris` (`python`) unit tests
 
 Running the tests requires `pytest`.
 
@@ -88,7 +88,7 @@ Running the tests requires `pytest`.
 py.test .
 ```
 
-### c++ unit tests
+### `osiris_lib` (`c++`) unit tests
 
 Following a build, run:
 
@@ -98,11 +98,11 @@ make test
 
 from the `build/` directory. 
 
-Dependencies
+`osiris_lib` dependencies
 -----------------
 
 - [CMake](https://cmake.org/) >= 3.18
-- a modern `c++` compiler and tool chain. This was tested and built with:
+- a modern `c++` compiler and tool chain. This was tested and built primarily with the following compilers, running on Ubuntu, using a dependency stack from `conda-forge`:
 
 ```
 clang version 15.0.7 (https://github.com/conda-forge/clangdev-feedstock fc523913ae327dfa0a91bb2b45a36c810e0f55d0)
@@ -110,23 +110,41 @@ Target: x86_64-unknown-linux-gnu
 Thread model: posix
 ```
 
+and 
+
+```
+g++ (conda-forge gcc 10.4.0-19) 10.4.0
+```
+
 ### handled by `CMake` (you don't have to do anything):
 - [`nlohmann/json`](https://github.com/nlohmann/json)
 - [`Catch2`](https://catch2.docsforge.com/)
 - [`xtensor`](https://github.com/xtensor-stack/xtensor)
 - [`xtl`](https://github.com/xtensor-stack/xtl)
+- [`xtensor-blas`](https://github.com/xtensor-stack/xtensor-blas)
 
-### install yourself if you want to `import osiris` in `python`:
+`osiris` dependencies for `python` bindings
+-----------------
+
+If you only want to use `osiris_lib` as a library for your project, these are the only dependencies. To use the `python` bindings, you will also need:
+
+### handled by `CMake` (you don't have to do anything):
+- [`xtensor-python`](https://github.com/xtensor-stack/xtensor-python)
+- [`pybind11`](https://pybind11.readthedocs.io/en/stable/index.html)
+
+### install yourself
 - [`python`](https://www.python.org/) 3.7+
 - [`numpy`](https://numpy.org/)
-- [`pybind11`](https://pybind11.readthedocs.io/en/stable/index.html)
-- [`xtensor-python`](https://github.com/xtensor-stack/xtensor-python)
+- [`scikit-build-core`](https://github.com/scikit-build/scikit-build-core)
+- [`setuptools-scm`](https://pypi.org/project/setuptools-scm/)
+
+### install yourself, optional:
 - [`pytest`](https://docs.pytest.org/en/7.4.x/) to run the `python` unit tests
 
-It is highly recomended to use use a package, dependency and environment manager like [mamba](https://mamba.readthedocs.io/en/latest/) or [conda](https://docs.conda.io/en/latest/). Then, setting up an environment to run `osiris` with `python` is as easy as (e.g. using `mamba`), from `pypi`:
+It is recomended to use use a package, dependency and environment manager like [mamba](https://mamba.readthedocs.io/en/latest/) or [conda](https://docs.conda.io/en/latest/). Then, setting up an environment to run `osiris` with `python` is as easy as (e.g. using `mamba`), from `pypi`:
 
 ```zsh
-mamba create -n osirenv python cmake compilers numpy pybind11 xtensor-python pytest
+mamba create -n osirenv python cmake compilers numpy pytest
 mamba activate osirenv
 pip install osiris
 ```
@@ -153,7 +171,7 @@ Using [`ipyparallel`](https://ipyparallel.readthedocs.io/en/latest/), notebooks 
 Windows runtime requirements
 ----------------------------
 
-On Windows, the Visual C++ 2015 redistributable packages are a runtime
+On Windows, the Visual `c++` 2015 redistributable packages are a runtime
 requirement for this project. It can be found [here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
 
 If you use the Anaconda python distribution, you may require the Visual Studio
