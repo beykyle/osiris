@@ -110,6 +110,12 @@ Target: x86_64-unknown-linux-gnu
 Thread model: posix
 ```
 
+and 
+
+```
+g++ (conda-forge gcc 10.4.0-19) 10.4.0
+```
+
 ### handled by `CMake` (you don't have to do anything):
 - [`nlohmann/json`](https://github.com/nlohmann/json)
 - [`Catch2`](https://catch2.docsforge.com/)
