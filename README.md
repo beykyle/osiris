@@ -11,7 +11,7 @@ Python Installation
 
 `osiris` is available at [pypi.org/project/osiris-py](https://pypi.org/project/osiris-py):
 
- - `pip install osiris-pu`
+ - `pip install osiris-py`
 
 Example use
 --------------
