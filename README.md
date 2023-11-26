@@ -132,6 +132,8 @@ If you only want to use `osiris_lib` as a library for your project, these are th
 ### install yourself
 - [`python`](https://www.python.org/) 3.7+
 - [`numpy`](https://numpy.org/)
+- [`scikit-build-core`](https://github.com/scikit-build/scikit-build-core)
+- [`setuptools-scm`](https://pypi.org/project/setuptools-scm/)
 
 ### install yourself, optional:
 - [`pytest`](https://docs.pytest.org/en/7.4.x/) to run the `python` unit tests
