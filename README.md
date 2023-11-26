@@ -67,7 +67,7 @@ From the `docs/` directory:
 make html
 ```
 
-### c++ documentation
+### `c++` documentation
 
 Following a build, run:
 
@@ -80,7 +80,7 @@ from the `build/` directory.
 Running the tests
 -----------------
 
-### python unit tests
+### `osiris` (`python`) unit tests
 
 Running the tests requires `pytest`.
 
@@ -88,7 +88,7 @@ Running the tests requires `pytest`.
 py.test .
 ```
 
-### c++ unit tests
+### `osiris_lib` (`c++`) unit tests
 
 Following a build, run:
 
@@ -98,7 +98,7 @@ make test
 
 from the `build/` directory. 
 
-Dependencies
+`osiris_lib` dependencies
 -----------------
 
 - [CMake](https://cmake.org/) >= 3.18
@@ -121,13 +121,16 @@ g++ (conda-forge gcc 10.4.0-19) 10.4.0
 - [`Catch2`](https://catch2.docsforge.com/)
 - [`xtensor`](https://github.com/xtensor-stack/xtensor)
 - [`xtl`](https://github.com/xtensor-stack/xtl)
-
-### handled by `CMake`, only required for building `python` bindings:
 - [`xtensor-blas`](https://github.com/xtensor-stack/xtensor-blas)
-- [`xtensor-python`](https://github.com/xtensor-stack/xtensor-python)
-- [`pybind11`](https://pybind11.readthedocs.io/en/stable/index.html)
+
+`osiris` dependencies for `python` bindings
+-----------------
 
 If you only want to use `osiris_lib` as a library for your project, these are the only dependencies. To use the `python` bindings, you will also need:
+
+### handled by `CMake` (you don't have to do anything):
+- [`xtensor-python`](https://github.com/xtensor-stack/xtensor-python)
+- [`pybind11`](https://pybind11.readthedocs.io/en/stable/index.html)
 
 ### install yourself
 - [`python`](https://www.python.org/) 3.7+
@@ -138,7 +141,7 @@ If you only want to use `osiris_lib` as a library for your project, these are th
 ### install yourself, optional:
 - [`pytest`](https://docs.pytest.org/en/7.4.x/) to run the `python` unit tests
 
-It is highly recomended to use use a package, dependency and environment manager like [mamba](https://mamba.readthedocs.io/en/latest/) or [conda](https://docs.conda.io/en/latest/). Then, setting up an environment to run `osiris` with `python` is as easy as (e.g. using `mamba`), from `pypi`:
+It is recomended to use use a package, dependency and environment manager like [mamba](https://mamba.readthedocs.io/en/latest/) or [conda](https://docs.conda.io/en/latest/). Then, setting up an environment to run `osiris` with `python` is as easy as (e.g. using `mamba`), from `pypi`:
 
 ```zsh
 mamba create -n osirenv python cmake compilers numpy pytest
@@ -168,7 +171,7 @@ Using [`ipyparallel`](https://ipyparallel.readthedocs.io/en/latest/), notebooks 
 Windows runtime requirements
 ----------------------------
 
-On Windows, the Visual C++ 2015 redistributable packages are a runtime
+On Windows, the Visual `c++` 2015 redistributable packages are a runtime
 requirement for this project. It can be found [here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
 
 If you use the Anaconda python distribution, you may require the Visual Studio
