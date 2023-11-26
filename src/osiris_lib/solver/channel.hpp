@@ -135,6 +135,7 @@ struct Channel {
             // dimensionless
             return std::copysign(1., ch.Zz) / (ab * k);
           }()) {}
+    
   };
 
   /// @brief analytic solutions of free, reduced, radial Schrödinger eqn; also
@@ -178,8 +179,6 @@ struct Channel {
   real proj_mass;
   /// @brief product of proton # of target and projectile
   real Zz;
-  /// @brief 2s+1, with s projectile spin
-  int s;
 
   Energetics set_erg_cms(real erg_cms) const {
     return Energetics(erg_cms, *this);
@@ -208,7 +207,7 @@ struct Channel {
   Channel(real threshold, real radius, real proj_mass, int Zp, int s,
           real targ_mass, int Zt)
       : threshold(threshold), radius(radius), targ_mass(targ_mass),
-        proj_mass(proj_mass), Zz(Zp * Zt), s(s) {}
+        proj_mass(proj_mass), Zz(Zp * Zt) {}
 };
 
 }; // namespace osiris

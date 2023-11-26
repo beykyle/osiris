@@ -1,74 +1,124 @@
 #ifndef SAE_HEADER
 #define SAE_HEADER
 
-#include "potential/potential.hpp"
-#include "util/constants.hpp"
-#include "util/types.hpp"
-#include "xtensor/xstrided_view.hpp"
+#include "rbm/eim.hpp"
+#include "solver/channel.hpp"
 
+#include <xtensor/xstrided_view.hpp>
 #include <xtensor-blas/xlinalg.hpp>
 #include <xtensor/xarray.hpp>
 #include <xtensor/xslice.hpp>
-#include <xtensor/xtensor.hpp>
+#include <xtensor/xarray.hpp>
 #include <xtensor/xview.hpp>
 
 namespace osiris {
-using namespace xt::placeholders;
 
-class EnergizedEIMInteractionSpace {
-public:
-  using params_t = xt::xtensor<real, 1>;
 
-  const int mesh_size;
+template <class array1d_t = xt::xtensor<cmpl,1>,
+          class array2d_t = xt::xtensor<cmpl,2>,
+          class array3d_t = xt::xtensor<cmpl,3>,
+          class array4d_t = xt::xtensor<cmpl,4>,
+          class params_t = xt::xtensor<real,1>,
+          typename std::enable_if_t<xt::is_xexpression<array1d_t>::value, bool> = true,
+          typename std::enable_if_t<xt::is_xexpression<array2d_t>::value, bool> = true,
+          typename std::enable_if_t<xt::is_xexpression<array3d_t>::value, bool> = true,
+          typename std::enable_if_t<xt::is_xexpression<array4d_t>::value, bool> = true,
+          typename std::enable_if_t<xt::is_xexpression<params_t>::value, bool> = true>
+struct Basis {
+  using interaction_t = EnergizedEIMInteractionSpace<array1d_t, array2d_t, array3d_t, array4d_t, params_t>;
+  
   const int nbasis;
-  const int lmax;
+  const std::array<int, 3> basis_vectors_shape = {interaction.lmax, nbasis, interaction.mesh_size,};
+  
+  const interaction_t interaction;
+  
+  const array3d_t phi_l_0;
+  const array3d_t vectors;
+  
+  const array4d_t A2_l;
+  const array3d_t A_13_l;
+  const array2d_t b2_l;
+  const array2d_t b13_l;
 
-  const xt::xtensor<real, 1> r_matches;
-  const std::array<int, 3> eim_matrices_shape = {lmax, mesh_size, nbasis};
+  Basis(
+      int nbasis, 
+      array3d_t phi_l_0,
+      array3d_t vectors,
+      array4d_t A2_l,
+      array3d_t A_13_l,
+      array2d_t b2_l,
+      array2d_t b13_l, 
+      interaction_t interaction):
+    nbasis(nbasis),
+    basis_vectors_shape({interaction.lmax, interaction.mesh_size, nbasis}),
+    interaction(interaction),
+    phi_l_0(phi_l_0),
+    vectors(vectors),
+    A2_l(A2_l),
+    A_13_l(A_13_l),
+    b2_l(b2_l),
+    b13_l(b13_l)
+    {}
 
-  xt::xtensor<cmpl, 3> Ainv_matrices;
+};
 
-  cmpl tilde(real s, params_t alpha, int l) const {
-    return eval_potential(s, alpha, l);
-  };
+template <class array1d_t = xt::xtensor<cmpl,1>,
+          class array2d_t = xt::xtensor<cmpl,2>,
+          class array3d_t = xt::xtensor<cmpl,3>,
+          class array4d_t = xt::xtensor<cmpl,4>,
+          class params_t = xt::xtensor<real,1>,
+          typename std::enable_if_t<xt::is_xexpression<array1d_t>::value, bool> = true,
+          typename std::enable_if_t<xt::is_xexpression<array2d_t>::value, bool> = true,
+          typename std::enable_if_t<xt::is_xexpression<array3d_t>::value, bool> = true,
+          typename std::enable_if_t<xt::is_xexpression<array4d_t>::value, bool> = true,
+          typename std::enable_if_t<xt::is_xexpression<params_t>::value, bool> = true>
+class ReducedBasisEmulator {
+public:
+  using basis_t = Basis<array1d_t, array2d_t, array3d_t, array4d_t, params_t>;
+  using interaction_t  = typename basis_t::interaction_t;
+  
+  basis_t basis_up;
+  basis_t basis_down;
+  interaction_t interactions_up;
+  interaction_t interactions_down;
+  const std::vector<Channel::FermionSpinOrbitCoupling> couplings_up;
+  const std::vector<Channel::FermionSpinOrbitCoupling> couplings_down;
+  const std::vector<Channel::Asymptotics> asymptotics;
 
-  xt::xtensor<cmpl, 1> coefficients(params_t alpha, int l) const {
-    auto Ainv = xt::strided_view(Ainv_matrices, {l, xt::ellipsis()});
-    auto u_real = xt::xtensor<cmpl, 1>({nbasis});
-    for (int i = 0; i < nbasis; ++i)
-      u_real(i) = tilde(r_matches(i), alpha, l);
-    return xt::linalg::dot(Ainv, u_real);
+  template<Polarization p>
+  array2d_t coefficients(params_t alpha) {
+
+    auto get_coeffs = [](
+        auto shape, auto alpha, auto interaction, auto basis)   { 
+
+      auto result = array2d_t(shape);
+      const auto beta = interaction.coefficients(alpha);
+      const auto A_utilde = xt::linalg::tensordot(beta, basis.A2_l, 1);
+      const auto A = A_utilde + basis.A_13_l;
+      const auto b_utilde = xt::linalg::tensordot(beta, basis.b2_l, 1);
+      const auto b = b_utilde + basis.b13_l;
+
+      for (int l = 0; l < interaction.lmax; ++l) {
+        auto x = xt::linalg::solve(
+            xt::view(A, l, xt::all(), xt::all()),
+            xt::view(b, l, xt::all(), xt::all())
+          );
+        xt::view(result, l, xt::all()) = x;
+      }
+      return result;
+
+    };
+    
+    if constexpr (p == Polarization::down)  {
+      auto shape = std::array<int,2> {interactions_up.lmax - 1, interactions_up.nbasis};
+      return get_coeffs(shape, alpha, interactions_down, basis_up);
+    }
+    else if constexpr (p == Polarization::up)  {
+      auto shape = std::array<int,2> {interactions_up.lmax, interactions_up.nbasis};
+      return get_coeffs(shape, alpha, interactions_up, basis_down);
+    }
   }
 
-  EnergizedEIMInteractionSpace(
-      int mesh_size, int nbasis, int lmax,
-      xt::xtensor<std::unique_ptr<Potential<xt::xtensor<real, 1>>>, 1>
-          &&potential,
-      xt::xtensor<cmpl, 3> Ainv_matrices, xt::xtensor<real, 1> r_matches)
-      : mesh_size(mesh_size), nbasis(nbasis), lmax(lmax),
-        potential(std::move(potential)), Ainv_matrices(Ainv_matrices),
-        r_matches(r_matches){};
-
-  real E(params_t alpha) const { return alpha(0); }
-
-  real reduced_mass(params_t alpha) const { return alpha(1); }
-
-  real momentum(params_t alpha) const {
-    const auto energy = E(alpha);
-    const auto mu = reduced_mass(alpha);
-    return sqrt(2 * mu * energy) / constants::hbarc;
-  }
-
-private:
-  const xt::xtensor<std::unique_ptr<Potential<params_t>>, 1> potential;
-
-  cmpl eval_potential(real s, params_t alpha, int l) const {
-    const auto k = momentum(alpha);
-    const auto energy = E(alpha);
-    const auto r = s / k;
-    return potential(l)->operator()(r, xt::view(alpha, xt::range(2, _))) /
-           energy;
-  }
 };
 
 } // namespace osiris
