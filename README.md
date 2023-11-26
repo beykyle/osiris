@@ -102,7 +102,7 @@ Dependencies
 -----------------
 
 - [CMake](https://cmake.org/) >= 3.18
-- a modern `c++` compiler and tool chain. This was tested and built with:
+- a modern `c++` compiler and tool chain. This was tested and built primarily with the following compilers, running on Ubuntu, using a dependency stack from `conda-forge`:
 
 ```
 clang version 15.0.7 (https://github.com/conda-forge/clangdev-feedstock fc523913ae327dfa0a91bb2b45a36c810e0f55d0)
