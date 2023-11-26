@@ -2,7 +2,7 @@
 
 OSIRIS   (/oʊˈsaɪərɨs/)
 ==============
-Optical model Scatterong & Reaction Software 
+Optical model Scattering & Reaction Software 
 
 A fast, modern nuclear reaction code with a `python` interface using [xtensor-python](https://github.com/xtensor-stack/xtensor-python), built for uncertainty quantificaiton and model order reduction of parametric nucleon-nuclear interactions.
 
