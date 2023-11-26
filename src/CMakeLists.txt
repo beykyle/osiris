@@ -1,5 +1,13 @@
 find_package(Python REQUIRED COMPONENTS Interpreter Development.Module NumPy)
-find_package(pybind11 CONFIG REQUIRED)
+FetchContent_Declare(
+  pybind11
+  GIT_REPOSITORY https://github.com/pybind/pybind11.git
+  GIT_TAG v2.11.1
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE)
+Message("fetching pybind11")
+FetchContent_MakeAvailable(pybind11)
+
 FetchContent_Declare(
   xtensor-python
   GIT_REPOSITORY https://github.com/xtensor-stack/xtensor-python.git
