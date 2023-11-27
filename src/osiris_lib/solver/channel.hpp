@@ -5,6 +5,9 @@
 #include "util/constants.hpp"
 #include "util/types.hpp"
 
+#include "xtensor/xtensor.hpp"
+#include "xtensor/xtensor_forward.hpp"
+
 #include <cassert>
 #include <cmath>
 #include <complex>
@@ -14,8 +17,8 @@
 
 namespace osiris {
 
-enum class Parity : bool { odd, even };
-enum class Polarization : bool { up, down };
+enum class Parity : bool { odd=0, even=1 };
+enum class Polarization : bool { down=0, up=1 };
 
 /// @brief  all information relevant to a specific initial/final state
 struct Channel {
@@ -51,20 +54,26 @@ struct Channel {
     }
 
     template <Polarization p>
-    static std::vector<FermionSpinOrbitCoupling> generate_couplings(int lmax) {
-      std::vector<FermionSpinOrbitCoupling> coupling{};
+    static xt::xtensor<real, 1> generate_couplings(int lmax) {
+      assert(lmax > 0);
+      size_t size = lmax;
       int l = 0;
       if constexpr (p == Polarization::up) {
-        coupling.resize(lmax);
-      } else {
-        coupling.resize(lmax - 1);
+        size = lmax;
+        l = 0;
+      } else if constexpr (p == Polarization::down) {
+        size = lmax - 1;
         l = 1;
       }
+      auto couplings = xt::xtensor<real, 1>(std::array<size_t, 1>{size});
+      auto i = couplings.begin();
       for (; l < lmax; ++l) {
         auto j21 = 2 * l + 2;
-        coupling[l] = FermionSpinOrbitCoupling(j21, l);
+        auto coupling = FermionSpinOrbitCoupling(j21, l);
+        *i = coupling.l_dot_s();
+        ++i;
       }
-      return coupling;
+      return couplings;
     }
   };
 
@@ -135,7 +144,6 @@ struct Channel {
             // dimensionless
             return std::copysign(1., ch.Zz) / (ab * k);
           }()) {}
-    
   };
 
   /// @brief analytic solutions of free, reduced, radial Schrödinger eqn; also
@@ -153,17 +161,25 @@ struct Channel {
 
     Asymptotics() = default;
 
-    Asymptotics(int l, real k, real r)
-        : wvfxn_out(asymptotics::h_plus{l}(k * r)),
-          wvfxn_in(asymptotics::h_minus{l}(k * r)),
-          wvfxn_deriv_out(asymptotics::d_dz(asymptotics::h_plus{l})(k * r)),
-          wvfxn_deriv_in(asymptotics::d_dz(asymptotics::h_minus{l})(k * r)) {}
+    Asymptotics(int l, real k, real r) : Asymptotics(l, k * r) {}
 
-    static std::vector<Asymptotics> generate_asymptotics(int lmax, real k,
-                                                         real r) {
-      std::vector<Asymptotics> asym(lmax);
+    Asymptotics(int l, real s)
+        : wvfxn_out(asymptotics::h_plus{l}(s)),
+          wvfxn_in(asymptotics::h_minus{l}(s)),
+          wvfxn_deriv_out(asymptotics::d_dz(asymptotics::h_plus{l})(s)),
+          wvfxn_deriv_in(asymptotics::d_dz(asymptotics::h_minus{l})(s)) {}
+
+    static xt::xtensor<cmpl, 2> generate_asymptotics(const int lmax,
+                                                     const real s) {
+      assert(lmax > 0);
+      auto asym = xt::xtensor<cmpl, 2>({(size_t)lmax, 4});
       for (int l = 0; l < lmax; ++l) {
-        asym[l] = Asymptotics(l, k, r);
+        const auto [h_plus, h_minus, h_plus_prime, h_minus_prime] =
+            Asymptotics(l, s);
+        asym(l, 0) = h_plus;
+        asym(l, 1) = h_minus;
+        asym(l, 2) = h_plus_prime;
+        asym(l, 3) = h_minus_prime;
       }
       return asym;
     }

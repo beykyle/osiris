@@ -1,6 +1,11 @@
-#include "pybind11/pybind11.h"
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <numeric>
+
 #include "xtensor/xarray.hpp"
 #include "xtensor/xmath.hpp"
+#include "pybind11/pybind11.h"
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
@@ -8,11 +13,6 @@
 #define FORCE_IMPORT_ARRAY
 #include "xtensor-python/pyarray.hpp"
 #include "xtensor-python/pyvectorize.hpp"
-
-#include <cmath>
-#include <fstream>
-#include <iostream>
-#include <numeric>
 
 #include "potential/potential.hpp"
 #include "rbm/bsp.hpp"
