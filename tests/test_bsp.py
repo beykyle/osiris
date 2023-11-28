@@ -143,8 +143,10 @@ class BSPTest(TestCase):
             np.array([0, 1, 2, 3]),
         )
 
-        expected_lbounds = np.array([[-1, -1, -1],  [-1, 0, -1], [0, -1, -1], [0, 0, -1]])
-        expected_ubounds = np.array([[0, 0, 1],  [0, 1, 1], [1, 0, 1], [1, 1, 1]])
+        expected_lbounds = np.array(
+            [[-1, -1, -1], [-1, 0, -1], [0, -1, -1], [0, 0, -1]]
+        )
+        expected_ubounds = np.array([[0, 0, 1], [0, 1, 1], [1, 0, 1], [1, 1, 1]])
 
         lbounds, ubounds = bsp.get_sub_partition_bounds()
 
