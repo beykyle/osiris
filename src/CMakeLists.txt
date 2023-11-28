@@ -21,6 +21,5 @@ python_add_library(osiris_core MODULE osiris_core_module.cpp WITH_SOABI)
 target_link_libraries(osiris_core PUBLIC pybind11::headers xtensor-python Python::NumPy osiris_lib)
 target_include_directories(osiris_core PUBLIC ${CMAKE_SOURCE_DIR}/src/osiris_lib)
 target_compile_definitions(osiris_core PRIVATE VERSION_INFO=${PROJECT_VERSION})
-
-
+set_target_properties(osiris_core PROPERTIES CXX_VISIBILITY_PRESET hidden)
 install(TARGETS osiris_core DESTINATION osiris)
