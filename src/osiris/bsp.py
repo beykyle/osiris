@@ -38,5 +38,20 @@ class BinarySPTree:
         for point in points:
             idx = self.idx(point)
             out[idx].append(point)
-
         return out
+
+    def get_sub_partition_bounds(self):
+        r"""
+            Returns :
+        2 arrays indxed by (number of sub partitions, number of dimensions),
+        the first representing the lower bound of each partition, and the
+        second the upper
+        """
+        lower_bounds = np.empty((self.size, self.dimensions))
+        upper_bounds = np.empty((self.size, self.dimensions))
+        for i in range(self.size):
+            l, u = self.bsp.get_bounds(i)
+            lower_bounds[i, :] = l
+            upper_bounds[i, :] = u
+
+        return lower_bounds, upper_bounds

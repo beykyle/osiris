@@ -43,7 +43,8 @@ void declare_bsp_tree(py::module &m, std::string &&typestr) {
       .def_readonly("bounds_left", &Class::bounds_left)
       .def_readonly("bounds_right", &Class::bounds_right)
       .def("__call__", &Class::operator[])
-      .def("at", &Class::at);
+      .def("at", &Class::at)
+      .def("get_bounds", &Class::get_bounds);
 }
 
 // Python Module and Docstrings

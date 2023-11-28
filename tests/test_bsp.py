@@ -6,7 +6,10 @@ import numpy as np
 class BSPTest(TestCase):
     def test_bsp_int(self):
         bsp = osiris.BinarySPTree(
-            2, np.array([-1, -1, -1]), np.array([1, 1, 1]), np.array([0, 1, 2, 3])
+            2,
+            np.array([-1, -1, -1]),
+            np.array([1, 1, 1]),
+            np.array([0, 1, 2, 3]),
         )
 
         np.testing.assert_equal(bsp.at(np.array([-1.0 / 2, -1.0 / 2, -1.0 / 2])), 0)
@@ -49,21 +52,35 @@ class BSPTest(TestCase):
             np.array(["a", "b", "c", "d"], dtype=object),
         )
 
-        np.testing.assert_string_equal(bsp.at(np.array([-1.0 / 2, -1.0 / 2, -1.0 / 2])), "a")
-        np.testing.assert_string_equal(bsp.at(np.array([-1.0 / 2, -1.0 / 2, 1.0 / 2])), "a")
+        np.testing.assert_string_equal(
+            bsp.at(np.array([-1.0 / 2, -1.0 / 2, -1.0 / 2])), "a"
+        )
+        np.testing.assert_string_equal(
+            bsp.at(np.array([-1.0 / 2, -1.0 / 2, 1.0 / 2])), "a"
+        )
 
-        np.testing.assert_string_equal(bsp.at(np.array([-1.0 / 2, 1.0 / 2, -1.0 / 2])), "b")
-        np.testing.assert_string_equal(bsp.at(np.array([-1.0 / 2, 1.0 / 2, 1.0 / 2])), "b")
+        np.testing.assert_string_equal(
+            bsp.at(np.array([-1.0 / 2, 1.0 / 2, -1.0 / 2])), "b"
+        )
+        np.testing.assert_string_equal(
+            bsp.at(np.array([-1.0 / 2, 1.0 / 2, 1.0 / 2])), "b"
+        )
 
-        np.testing.assert_string_equal(bsp.at(np.array([1.0 / 2, -1.0 / 2, -1.0 / 2])), "c")
-        np.testing.assert_string_equal(bsp.at(np.array([1.0 / 2, -1.0 / 2, 1.0 / 2])), "c")
+        np.testing.assert_string_equal(
+            bsp.at(np.array([1.0 / 2, -1.0 / 2, -1.0 / 2])), "c"
+        )
+        np.testing.assert_string_equal(
+            bsp.at(np.array([1.0 / 2, -1.0 / 2, 1.0 / 2])), "c"
+        )
 
-        np.testing.assert_string_equal(bsp.at(np.array([1.0 / 2, 1.0 / 2, -1.0 / 2])), "d")
-        np.testing.assert_string_equal(bsp.at(np.array([1.0 / 2, 1.0 / 2, 1.0 / 2])), "d")
-
+        np.testing.assert_string_equal(
+            bsp.at(np.array([1.0 / 2, 1.0 / 2, -1.0 / 2])), "d"
+        )
+        np.testing.assert_string_equal(
+            bsp.at(np.array([1.0 / 2, 1.0 / 2, 1.0 / 2])), "d"
+        )
 
     def test_bsp_equal_bounds(self):
-
         # This bsp is only 2D; the last dimension will be ignored bc the upper and lower
         # bounds are equal.
         # This means we split x at 0, then y at 0, then x at +/- 1/2
@@ -91,17 +108,45 @@ class BSPTest(TestCase):
         np.testing.assert_equal(bsp.at(np.array([0.75, 0.75, 1])), 7)
         np.testing.assert_equal(bsp.at(np.array([0.75, 0.75, 1])), 7)
 
-
     def test_sort(self):
         bsp = osiris.BinarySPTree(
-            2, np.array([-1, -1, -1]), np.array([1, 1, 1]), np.array([0, 1, 2, 3])
+            2,
+            np.array([-1, -1, -1]),
+            np.array([1, 1, 1]),
+            np.array([0, 1, 2, 3]),
         )
 
         params = np.array([[-0.5, -0.5, -0.5], [0.9, 0.9, 0.9], [0.8, 0.8, 0.8]])
         sorted_params = bsp.sort(params)
 
-        np.testing.assert_equal(sorted_params[0] , [np.array([-0.5, -0.5, -0.5])])
-        np.testing.assert_equal(sorted_params[1] , [])
-        np.testing.assert_equal(sorted_params[2] , [])
-        np.testing.assert_equal(sorted_params[3] , [
-            np.array([0.9, 0.9, 0.9]), np.array([0.8, 0.8, 0.8])])
+        np.testing.assert_equal(sorted_params[0], [np.array([-0.5, -0.5, -0.5])])
+        np.testing.assert_equal(sorted_params[1], [])
+        np.testing.assert_equal(sorted_params[2], [])
+        np.testing.assert_equal(
+            sorted_params[3], [np.array([0.9, 0.9, 0.9]), np.array([0.8, 0.8, 0.8])]
+        )
+
+    def test_sp_bounds(self):
+        #     y
+        #     |
+        #   1 -------
+        #     |1 |3 |
+        #   0 -------
+        #     |0 |2 |
+        #  -1 --------x
+        #    -1  0   1
+        #
+        bsp = osiris.BinarySPTree(
+            2,
+            np.array([-1, -1, -1]),
+            np.array([1, 1, 1]),
+            np.array([0, 1, 2, 3]),
+        )
+
+        expected_lbounds = np.array([[-1, -1, -1],  [-1, 0, -1], [0, -1, -1], [0, 0, -1]])
+        expected_ubounds = np.array([[0, 0, 1],  [0, 1, 1], [1, 0, 1], [1, 1, 1]])
+
+        lbounds, ubounds = bsp.get_sub_partition_bounds()
+
+        np.testing.assert_equal(lbounds, expected_lbounds)
+        np.testing.assert_equal(ubounds, expected_ubounds)

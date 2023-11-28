@@ -10,6 +10,7 @@
 #include <memory>
 #include <optional>
 #include <stdexcept>
+#include <vector>
 
 namespace osiris {
 
@@ -20,6 +21,9 @@ namespace osiris {
 /// the first dimension if/when the number of layers exceeds the number of
 /// dimensions.
 template <class T, class Point = xt::xtensor<real, 1>> class BinarySPTree {
+private:
+  /// @brief stores the left abd right bounds for each of the 2^depth sub partitions of the space
+  std::vector<std::pair<Point,Point>> sub_partition_bounds;
 public:
   /// @brief number of layers, number of partitions goes as 2^depth, partition
   /// volumes go with (1/2)^depth
@@ -29,12 +33,14 @@ public:
   /// @brief outer bounds/corners of hyper-box in input space
   const Point bounds_left, bounds_right{};
 
+
   BinarySPTree(int depth, Point bounds_left, Point bounds_right,
                xt::xtensor<T, 1> data)
-      : depth(depth - 1), dimensions(bounds_left.size()),
+      : sub_partition_bounds(std::vector<std::pair<Point,Point>>(std::pow(2,depth))),
+        depth(depth - 1), dimensions(bounds_left.size()),
         bounds_left(bounds_left), bounds_right(bounds_right), data(data),
         root(std::make_unique<Node>(depth - 1, 0, bounds_left, bounds_right, 0,
-                                    data.size() - 1)) {
+                                    data.size() - 1, sub_partition_bounds)) {
     if (depth < 1) {
       throw std::runtime_error("depth must be >= 1");
     }
@@ -64,6 +70,10 @@ public:
 
   int size() const { return std::pow(2, depth); }
 
+  std::pair<Point, Point> get_bounds(idx i) const {
+    return sub_partition_bounds[i];
+  }
+
 private:
   /// @brief Encapsulates a partitioning of the input space into two
   /// sub-volumes, left and right
@@ -88,7 +98,7 @@ private:
     const real bound;
 
     Node(int depth, int split_dimension, Point bounds_left, Point bounds_right,
-         idx data_begin, idx data_end);
+         idx data_begin, idx data_end, std::vector<std::pair<Point,Point>>& sub_partition_bounds);
 
     /// @brief
     virtual idx operator[](const Point &point);
@@ -102,7 +112,8 @@ private:
   public:
     Leaf(int next_split_dimension, Point bounds_left, Point bounds_right,
          BinarySPTree<T, Point>::idx idx_left,
-         BinarySPTree<T, Point>::idx idx_right);
+         BinarySPTree<T, Point>::idx idx_right, 
+         std::vector<std::pair<Point, Point>>& sub_partition_bounds);
 
     idx operator[](const Point &point) final;
   };
@@ -124,7 +135,8 @@ BinarySPTree<T, Point>::Node::split_down_the_middle(idx begin, idx end) {
 template <class T, class Point>
 BinarySPTree<T, Point>::Node::Node(int depth, int split_dimension,
                                    Point bounds_left, Point bounds_right,
-                                   idx idx_begin, idx idx_end)
+                                   idx idx_begin, idx idx_end, 
+                                   std::vector<std::pair<Point,Point>>& sub_partition_bounds)
     : depth(depth), split_dimension(split_dimension),
       bound((bounds_left[split_dimension] + bounds_right[split_dimension]) /
             2) {
@@ -143,10 +155,10 @@ BinarySPTree<T, Point>::Node::Node(int depth, int split_dimension,
     next_split_dimension = 0;
 
   // construct new boundaries
-  auto new_bounds_right = bounds_right;
-  new_bounds_right[split_dimension] = bound;
   auto new_bounds_left = bounds_left;
   new_bounds_left[split_dimension] = bound;
+  auto new_bounds_right = bounds_right;
+  new_bounds_right[split_dimension] = bound;
 
   // determine remaining depth from daughter node to leaves
   const auto daughter_depths = depth - 1;
@@ -157,11 +169,12 @@ BinarySPTree<T, Point>::Node::Node(int depth, int split_dimension,
 
     left = std::move(std::make_unique<BinarySPTree<T, Point>::Node>(
         daughter_depths, next_split_dimension, bounds_left, new_bounds_right,
-        left_data.first, left_data.second));
+        left_data.first, left_data.second, sub_partition_bounds));
 
     right = std::move(std::make_unique<BinarySPTree<T, Point>::Node>(
         daughter_depths, next_split_dimension, new_bounds_left, bounds_right,
-        right_data.first, right_data.second));
+        right_data.first, right_data.second, sub_partition_bounds));
+
   } else if (depth == 1) {
     assert(idx_end - idx_begin + 1 == 4);
     auto left_start = idx_begin;
@@ -171,10 +184,14 @@ BinarySPTree<T, Point>::Node::Node(int depth, int split_dimension,
 
     left = std::move(std::make_unique<BinarySPTree<T, Point>::Leaf>(
         next_split_dimension, bounds_left, new_bounds_right, left_start,
-        left_end));
+        left_end, sub_partition_bounds));
     right = std::move(std::make_unique<BinarySPTree<T, Point>::Leaf>(
         next_split_dimension, new_bounds_left, bounds_right, right_start,
-        right_end));
+        right_end, sub_partition_bounds));
+  }
+  else if (depth == 0) {
+    sub_partition_bounds[idx_begin] = {bounds_left, new_bounds_right};
+    sub_partition_bounds[idx_end] = {new_bounds_left, bounds_right};
   }
 }
 
@@ -190,9 +207,10 @@ template <class T, class Point>
 BinarySPTree<T, Point>::Leaf::Leaf(int split_dimension, Point bounds_left,
                                    Point bounds_right,
                                    BinarySPTree<T, Point>::idx idx_left,
-                                   BinarySPTree<T, Point>::idx idx_right)
+                                   BinarySPTree<T, Point>::idx idx_right,
+                                   std::vector<std::pair<Point, Point>>& sub_partition_bounds)
     : BinarySPTree<T, Point>::Node(0, split_dimension, bounds_left,
-                                   bounds_right, idx_left, idx_right),
+                                   bounds_right, idx_left, idx_right, sub_partition_bounds),
       idx_left(idx_left), idx_right(idx_right) {}
 
 template <class T, class Point>
