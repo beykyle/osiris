@@ -20,10 +20,10 @@ class BinarySPTree:
         # bounds for unfrozen params only
         self.param_mask = np.logical_not(mask)
         self.frozen_mask = mask
-        lower_bound = lower_bound[self.param_mask]
-        upper_bound = upper_bound[self.param_mask]
+        self.lower_bound = lower_bound[self.param_mask]
+        self.upper_bound = upper_bound[self.param_mask]
 
-        self.bsp = BSPtree(depth, lower_bound, upper_bound, idx)
+        self.bsp = BSPtree(depth, self.lower_bound, self.upper_bound, idx)
 
     def idx(self, point):
         assert np.all(point[self.frozen_mask] == self.frozen_params)
@@ -33,10 +33,14 @@ class BinarySPTree:
         assert np.all(point[self.frozen_mask] == self.frozen_params)
         return self.data[self.bsp.at(point[self.param_mask])]
 
-    def sort(self, points):
+    def sort(self, points, mask=None):
+        if mask is None:
+            mask = np.ones(self.dimensions, dtype=np.int32)
+        assert np.sum(mask) == self.dimensions
         out = [[] for i in range(self.size)]
         for point in points:
-            idx = self.idx(point)
+            p = point[mask]
+            idx = self.idx(p)
             out[idx].append(point)
         return out
 
@@ -51,7 +55,9 @@ class BinarySPTree:
         upper_bounds = np.empty((self.size, self.dimensions))
         for i in range(self.size):
             l, u = self.bsp.get_bounds(i)
-            lower_bounds[i, :] = l
-            upper_bounds[i, :] = u
+            lower_bounds[i, self.param_mask] = l
+            upper_bounds[i, self.param_mask] = u
+            lower_bounds[i, self.frozen_mask] = self.frozen_params
+            upper_bounds[i, self.frozen_mask] = self.frozen_params
 
         return lower_bounds, upper_bounds

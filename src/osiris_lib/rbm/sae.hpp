@@ -79,9 +79,9 @@ public:
   using interaction_t = typename basis_t::interaction_t;
 
   /// @brief 0 is spin-up, 1 is spin-down
-  std::array<basis_t,2> bases;
+  std::array<basis_t, 2> bases;
   /// @brief 0 is spin-up, 1 is spin-down
-  std::array<interaction_t,2> interactions;
+  std::array<interaction_t, 2> interactions;
 
   /// @brief columns: l, rows: [h_plus, h_minus, h_plus_prime, h_minus_prime]
   const xt::xtensor<cmpl, 4> asymptotics;
@@ -106,28 +106,26 @@ public:
 
     auto interaction = interactions[p];
     if constexpr (p == Polarization::down) {
-      auto shape =
-          std::array<int, 2>{interaction.lmax - 1, interaction.nbasis};
+      auto shape = std::array<int, 2>{interaction.lmax - 1, interaction.nbasis};
       return get_coeffs(shape, alpha, interaction, bases[p]);
     } else if constexpr (p == Polarization::up) {
-      auto shape =
-          std::array<int, 2>{interaction.lmax, interaction.nbasis};
+      auto shape = std::array<int, 2>{interaction.lmax, interaction.nbasis};
       return get_coeffs(shape, alpha, interaction, bases[p]);
     }
   }
 
-  template<Polarization p> array1d_t rmatrix(params_t alpha) {
+  template <Polarization p> array1d_t rmatrix(params_t alpha) {
     auto coeffs = coefficients<p>(alpha);
     auto rm = array1d_t(coeffs.shape()[0]);
 
     // get emulated value of phi and phi_prime at channel radius
 
-    //TODO
+    // TODO
   }
-  
-  template<Polarization p> array1d_t smatrix(params_t alpha) {
+
+  template <Polarization p> array1d_t smatrix(params_t alpha) {
     auto rm = rmatrix(alpha);
-    //TODO
+    // TODO
   }
 };
 

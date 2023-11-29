@@ -17,8 +17,8 @@
 
 namespace osiris {
 
-enum class Parity : bool { odd=0, even=1 };
-enum class Polarization : bool { down=0, up=1 };
+enum class Parity : bool { odd = 0, even = 1 };
+enum class Polarization : bool { down = 0, up = 1 };
 
 /// @brief  all information relevant to a specific initial/final state
 struct Channel {

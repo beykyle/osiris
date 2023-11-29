@@ -3,9 +3,9 @@
 #include <iostream>
 #include <numeric>
 
+#include "pybind11/pybind11.h"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xmath.hpp"
-#include "pybind11/pybind11.h"
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
