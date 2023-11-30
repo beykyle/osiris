@@ -42,6 +42,7 @@ class BinarySPTree:
             p = point[mask]
             idx = self.idx(p)
             out[idx].append(point)
+        out = [np.array(sv) for sv in out]
         return out
 
     def get_sub_partition_bounds(self):
