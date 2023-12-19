@@ -1,0 +1,35 @@
+---
+name: Python format
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9']
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      - name: black
+        uses: lgeiger/black-action@v1.0.1
+        with:
+          args: .
+      - name: Check for modified files
+        id: git-check
+        run: echo "modified=$(if git diff-index --quiet HEAD --; then echo "false";
+          else echo "true"; fi)" >> $GITHUB_OUTPUT
+      - name: Push changes
+        if: steps.git-check.outputs.modified == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v4
