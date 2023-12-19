@@ -22,6 +22,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.head_ref }}
+      - name: install black
+        run: pip install black
+      - name: run black recursively on *.py files
+        run: find "./" -type f -name "*.py"  -exec black  {} \;
       - name: Check for modified files
         id: git-check
         run: echo "modified=$(if git diff-index --quiet HEAD --; then echo "false";
