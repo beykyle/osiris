@@ -34,11 +34,14 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/beykyle/osiris.git
   GIT_TAG "origin/main"
   )
-FetchContent_MakeAvailable(osiris_lib)
+FetchContent_MakeAvailable(osiris)
 ```
 
-Now you can `#include` files like `"potential/params.hpp"` into your project, as long as you make `osiris_lib` a dependency of the relevant target in your `CMakeLists.txt`.
+Now you can `#include` files like `"potential/params.hpp"` into your project, as long as you link `osiris_lib` to the relevant target in your `CMakeLists.txt`, e.g.
 
+```cmake
+target_link_libraries(<MY_TARGET> osiris_lib)
+```
 
 Standalone executable 
 ----------------------------
