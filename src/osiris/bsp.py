@@ -35,20 +35,20 @@ class BinarySPTree:
 
     def sort(self, points, mask=None):
         """
-            Params:
-                points (ndarray): 2d array (mxn), m being number of points, n being the dimension
-                mask (ndarray): logical mask of size n (the dimension of the points), enabling sorted a
-                    set of points that are partitioned alng only a subset of their dimensions
-            Returns:
-                out (list): list with an element for each partition containing the indices
-                    (along axis 0 of points) corresponding to the points w/in the partition
+        Params:
+            points (ndarray): 2d array (mxn), m being number of points, n being the dimension
+            mask (ndarray): logical mask of size n (the dimension of the points), enabling sorted a
+                set of points that are partitioned alng only a subset of their dimensions
+        Returns:
+            out (list): list with an element for each partition containing the indices
+                (along axis 0 of points) corresponding to the points w/in the partition
         """
         if mask is None:
             mask = np.ones(self.dimensions, dtype=np.int32)
         assert np.sum(mask) == self.dimensions
         out = [[] for i in range(self.size)]
         for i in range(points.shape[0]):
-            p = points[i,mask]
+            p = points[i, mask]
             idx = self.idx(p)
             out[idx].append(i)
         out = [np.array(sv) for sv in out]
