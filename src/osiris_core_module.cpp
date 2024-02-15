@@ -3,6 +3,7 @@
 #include <iostream>
 #include <numeric>
 
+#include "potential/wlh_params.hpp"
 #include "pybind11/pybind11.h"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xmath.hpp"
@@ -22,6 +23,13 @@ namespace py = pybind11;
 using namespace osiris;
 
 constexpr auto n = osiris::Proj::neutron;
+
+template <Proj p> auto wlh_n_from_json(std::string fpath) {
+  std::ifstream i(fpath);
+  json j;
+  i >> j;
+  return osiris::WLH21Params<p>(j);
+}
 
 template <Proj p> auto kduq_n_from_json(std::string fpath) {
   std::ifstream i(fpath);
@@ -183,6 +191,134 @@ PYBIND11_MODULE(osiris_core, m) {
       .def_readwrite("vso2_0", &KD03Params<Proj::proton>::vso2_0)
       .def_readwrite("wso1_0", &KD03Params<Proj::proton>::wso1_0)
       .def_readwrite("wso2_0", &KD03Params<Proj::proton>::wso2_0);
+  
+  py::class_<WLH21Params<Proj::neutron>>(m, "WLH21ParamsNeutron")
+      .def(py::init<>())
+      .def("from_json", &wlh_n_from_json<Proj::neutron>)
+      .def("real_cent_r", &WLH21Params<Proj::neutron>::real_cent_r)
+      .def("cmpl_cent_r", &WLH21Params<Proj::neutron>::cmpl_cent_r)
+      .def("cmpl_surf_r", &WLH21Params<Proj::neutron>::cmpl_surf_r)
+      .def("real_spin_r", &WLH21Params<Proj::neutron>::real_spin_r)
+      .def("cmpl_spin_r", &WLH21Params<Proj::neutron>::cmpl_spin_r)
+      .def("real_cent_a", &WLH21Params<Proj::neutron>::real_cent_a)
+      .def("cmpl_cent_a", &WLH21Params<Proj::neutron>::cmpl_cent_a)
+      .def("cmpl_surf_a", &WLH21Params<Proj::neutron>::cmpl_surf_a)
+      .def("real_spin_a", &WLH21Params<Proj::neutron>::real_spin_a)
+      .def("cmpl_spin_a", &WLH21Params<Proj::neutron>::cmpl_spin_a)
+      .def("real_cent_V", &WLH21Params<Proj::neutron>::real_cent_V)
+      .def("cmpl_cent_V", &WLH21Params<Proj::neutron>::cmpl_cent_V)
+      .def("cmpl_surf_V", &WLH21Params<Proj::neutron>::cmpl_surf_V)
+      .def("real_spin_V", &WLH21Params<Proj::neutron>::real_spin_V)
+      .def("cmpl_spin_V", &WLH21Params<Proj::neutron>::cmpl_spin_V)
+      .def_readwrite("v0", &WLH21Params<Proj::neutron>::v0)
+      .def_readwrite("v1", &WLH21Params<Proj::neutron>::v1)
+      .def_readwrite("v2", &WLH21Params<Proj::neutron>::v2)
+      .def_readwrite("v3", &WLH21Params<Proj::neutron>::v3)
+      .def_readwrite("v4", &WLH21Params<Proj::neutron>::v4)
+      .def_readwrite("v5", &WLH21Params<Proj::neutron>::v5)
+      .def_readwrite("v6", &WLH21Params<Proj::neutron>::v6)
+      .def_readwrite("r1", &WLH21Params<Proj::neutron>::r1)
+      .def_readwrite("r2", &WLH21Params<Proj::neutron>::r2)
+      .def_readwrite("r3", &WLH21Params<Proj::neutron>::r3)
+      .def_readwrite("a0", &WLH21Params<Proj::neutron>::a0)
+      .def_readwrite("a1", &WLH21Params<Proj::neutron>::a1)
+      .def_readwrite("a2", &WLH21Params<Proj::neutron>::a2)
+      .def_readwrite("a3", &WLH21Params<Proj::neutron>::a3)
+      .def_readwrite("a4", &WLH21Params<Proj::neutron>::a4)
+      .def_readwrite("w0", &WLH21Params<Proj::neutron>::w0)
+      .def_readwrite("w1", &WLH21Params<Proj::neutron>::w1)
+      .def_readwrite("w2", &WLH21Params<Proj::neutron>::w2)
+      .def_readwrite("w3", &WLH21Params<Proj::neutron>::w3)
+      .def_readwrite("w4", &WLH21Params<Proj::neutron>::w4)
+      .def_readwrite("rw0", &WLH21Params<Proj::neutron>::rw0)
+      .def_readwrite("rw1", &WLH21Params<Proj::neutron>::rw1)
+      .def_readwrite("rw2", &WLH21Params<Proj::neutron>::rw2)
+      .def_readwrite("rw3", &WLH21Params<Proj::neutron>::rw3)
+      .def_readwrite("rw4", &WLH21Params<Proj::neutron>::rw4)
+      .def_readwrite("rw5", &WLH21Params<Proj::neutron>::rw5)
+      .def_readwrite("aw0", &WLH21Params<Proj::neutron>::aw0)
+      .def_readwrite("aw1", &WLH21Params<Proj::neutron>::aw1)
+      .def_readwrite("aw2", &WLH21Params<Proj::neutron>::aw2)
+      .def_readwrite("aw3", &WLH21Params<Proj::neutron>::aw3)
+      .def_readwrite("aw4", &WLH21Params<Proj::neutron>::aw4)
+      .def_readwrite("d0", &WLH21Params<Proj::neutron>::d0)
+      .def_readwrite("d1", &WLH21Params<Proj::neutron>::d1)
+      .def_readwrite("d2", &WLH21Params<Proj::neutron>::d2)
+      .def_readwrite("d3", &WLH21Params<Proj::neutron>::d3)
+      .def_readwrite("rs0", &WLH21Params<Proj::neutron>::rs0)
+      .def_readwrite("rs1", &WLH21Params<Proj::neutron>::rs1)
+      .def_readwrite("rs2", &WLH21Params<Proj::neutron>::rs2)
+      .def_readwrite("as0", &WLH21Params<Proj::neutron>::as0)
+      .def_readwrite("vso_0", &WLH21Params<Proj::neutron>::vso_0)
+      .def_readwrite("vso_1", &WLH21Params<Proj::neutron>::vso_1)
+      .def_readwrite("rso_0", &WLH21Params<Proj::neutron>::rso_0)
+      .def_readwrite("rso_1", &WLH21Params<Proj::neutron>::rso_1)
+      .def_readwrite("aso_0", &WLH21Params<Proj::neutron>::aso_0)
+      .def_readwrite("aso_1", &WLH21Params<Proj::neutron>::aso_1);
+  
+  py::class_<WLH21Params<Proj::proton>>(m, "WLH21ParamsProton")
+      .def(py::init<>())
+      .def("from_json", &wlh_n_from_json<Proj::proton>)
+      .def("real_cent_r", &WLH21Params<Proj::proton>::real_cent_r)
+      .def("cmpl_cent_r", &WLH21Params<Proj::proton>::cmpl_cent_r)
+      .def("cmpl_surf_r", &WLH21Params<Proj::proton>::cmpl_surf_r)
+      .def("real_spin_r", &WLH21Params<Proj::proton>::real_spin_r)
+      .def("cmpl_spin_r", &WLH21Params<Proj::proton>::cmpl_spin_r)
+      .def("real_cent_a", &WLH21Params<Proj::proton>::real_cent_a)
+      .def("cmpl_cent_a", &WLH21Params<Proj::proton>::cmpl_cent_a)
+      .def("cmpl_surf_a", &WLH21Params<Proj::proton>::cmpl_surf_a)
+      .def("real_spin_a", &WLH21Params<Proj::proton>::real_spin_a)
+      .def("cmpl_spin_a", &WLH21Params<Proj::proton>::cmpl_spin_a)
+      .def("real_cent_V", &WLH21Params<Proj::proton>::real_cent_V)
+      .def("cmpl_cent_V", &WLH21Params<Proj::proton>::cmpl_cent_V)
+      .def("cmpl_surf_V", &WLH21Params<Proj::proton>::cmpl_surf_V)
+      .def("real_spin_V", &WLH21Params<Proj::proton>::real_spin_V)
+      .def("cmpl_spin_V", &WLH21Params<Proj::proton>::cmpl_spin_V)
+      .def_readwrite("v0", &WLH21Params<Proj::proton>::v0)
+      .def_readwrite("v1", &WLH21Params<Proj::proton>::v1)
+      .def_readwrite("v2", &WLH21Params<Proj::proton>::v2)
+      .def_readwrite("v3", &WLH21Params<Proj::proton>::v3)
+      .def_readwrite("v4", &WLH21Params<Proj::proton>::v4)
+      .def_readwrite("v5", &WLH21Params<Proj::proton>::v5)
+      .def_readwrite("v6", &WLH21Params<Proj::proton>::v6)
+      .def_readwrite("r1", &WLH21Params<Proj::proton>::r1)
+      .def_readwrite("r2", &WLH21Params<Proj::proton>::r2)
+      .def_readwrite("r3", &WLH21Params<Proj::proton>::r3)
+      .def_readwrite("a0", &WLH21Params<Proj::proton>::a0)
+      .def_readwrite("a1", &WLH21Params<Proj::proton>::a1)
+      .def_readwrite("a2", &WLH21Params<Proj::proton>::a2)
+      .def_readwrite("a3", &WLH21Params<Proj::proton>::a3)
+      .def_readwrite("a4", &WLH21Params<Proj::proton>::a4)
+      .def_readwrite("w0", &WLH21Params<Proj::proton>::w0)
+      .def_readwrite("w1", &WLH21Params<Proj::proton>::w1)
+      .def_readwrite("w2", &WLH21Params<Proj::proton>::w2)
+      .def_readwrite("w3", &WLH21Params<Proj::proton>::w3)
+      .def_readwrite("w4", &WLH21Params<Proj::proton>::w4)
+      .def_readwrite("rw0", &WLH21Params<Proj::proton>::rw0)
+      .def_readwrite("rw1", &WLH21Params<Proj::proton>::rw1)
+      .def_readwrite("rw2", &WLH21Params<Proj::proton>::rw2)
+      .def_readwrite("rw3", &WLH21Params<Proj::proton>::rw3)
+      .def_readwrite("rw4", &WLH21Params<Proj::proton>::rw4)
+      .def_readwrite("rw5", &WLH21Params<Proj::proton>::rw5)
+      .def_readwrite("aw0", &WLH21Params<Proj::proton>::aw0)
+      .def_readwrite("aw1", &WLH21Params<Proj::proton>::aw1)
+      .def_readwrite("aw2", &WLH21Params<Proj::proton>::aw2)
+      .def_readwrite("aw3", &WLH21Params<Proj::proton>::aw3)
+      .def_readwrite("aw4", &WLH21Params<Proj::proton>::aw4)
+      .def_readwrite("d0", &WLH21Params<Proj::proton>::d0)
+      .def_readwrite("d1", &WLH21Params<Proj::proton>::d1)
+      .def_readwrite("d2", &WLH21Params<Proj::proton>::d2)
+      .def_readwrite("d3", &WLH21Params<Proj::proton>::d3)
+      .def_readwrite("rs0", &WLH21Params<Proj::proton>::rs0)
+      .def_readwrite("rs1", &WLH21Params<Proj::proton>::rs1)
+      .def_readwrite("rs2", &WLH21Params<Proj::proton>::rs2)
+      .def_readwrite("as0", &WLH21Params<Proj::proton>::as0)
+      .def_readwrite("vso_0", &WLH21Params<Proj::proton>::vso_0)
+      .def_readwrite("vso_1", &WLH21Params<Proj::proton>::vso_1)
+      .def_readwrite("rso_0", &WLH21Params<Proj::proton>::rso_0)
+      .def_readwrite("rso_1", &WLH21Params<Proj::proton>::rso_1)
+      .def_readwrite("aso_0", &WLH21Params<Proj::proton>::aso_0)
+      .def_readwrite("aso_1", &WLH21Params<Proj::proton>::aso_1);
 
   declare_bsp_tree<int>(m, std::string{"int"});
 

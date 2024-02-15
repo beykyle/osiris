@@ -12,7 +12,7 @@ namespace osiris {
 /// Phys. Rev. Lett. 127, 182502 (2021),
 /// URL https://link.aps.org/doi/10.1103/PhysRevLett.127.182502.
 template <Proj projectile> class WLH21Params : public OMParams<projectile> {
-protected:
+public:
   // real central depth
   real v0, v1, v2, v3, v4, v5, v6;
 
@@ -41,7 +41,6 @@ protected:
   real rso_0, rso_1;
   real aso_0, aso_1;
 
-public:
   real real_cent_r(int Z, int A, real erg) const final;
   real cmpl_cent_r(int Z, int A, real erg) const final;
   real cmpl_surf_r(int Z, int A, real erg) const final;
