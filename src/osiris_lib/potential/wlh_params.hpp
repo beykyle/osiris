@@ -82,7 +82,6 @@ public:
         rso_0(1.2794000707), rso_1(0.8734769907), aso_0(0.8060570111),
         aso_1(0.0003509748) {}
 
-  using OMParams<projectile>::asym;
 };
 
 template <>
@@ -113,7 +112,7 @@ template <Proj proj>
 real WLH21Params<proj>::cmpl_surf_r(int, int A, real erg) const {
   const real a = static_cast<real>(A);
   const real a3 = pow(a, 1. / 3.);
-  return a3 * (rs0 - rs1 * erg) - rs2;
+  return a3 * (rs0 - rs2 * erg) - rs1;
 }
 
 template <Proj proj>
@@ -153,7 +152,7 @@ real WLH21Params<proj>::real_spin_a(int, int A, real) const {
 template <Proj proj>
 real WLH21Params<proj>::real_cent_V(int Z, int A, real erg) const {
   // delta = +/- (N-Z)/A ; - for neutron, + for proton
-  const real delta = asym(Z, A);
+  const real delta = OMParams<Proj::proton>::asym(Z, A);
   const real v_erg = v0 - v1 * erg + v2 * erg * erg + v3 * erg * erg * erg;
   const real v_asym = (v4 - v5 * erg + v6 * erg * erg) * delta;
   return -(v_erg + v_asym);
@@ -162,7 +161,7 @@ real WLH21Params<proj>::real_cent_V(int Z, int A, real erg) const {
 template <Proj proj>
 real WLH21Params<proj>::cmpl_cent_V(int Z, int A, real erg) const {
   // delta = +/- (N-Z)/A ; - for neutron, + for proton
-  const real delta = asym(Z, A);
+  const real delta = OMParams<Proj::proton>::asym(Z, A);
   const real v_erg = w0 + w1 * erg - w2 * erg * erg;
   if constexpr (proj == Proj::neutron)
     return -(v_erg + (-w3 - w4 * erg) * delta);
