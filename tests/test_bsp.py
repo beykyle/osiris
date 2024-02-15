@@ -119,12 +119,10 @@ class BSPTest(TestCase):
         params = np.array([[-0.5, -0.5, -0.5], [0.9, 0.9, 0.9], [0.8, 0.8, 0.8]])
         sorted_params = bsp.sort(params)
 
-        np.testing.assert_equal(sorted_params[0], [np.array([-0.5, -0.5, -0.5])])
+        np.testing.assert_equal(sorted_params[0], [0])
         np.testing.assert_equal(sorted_params[1], [])
         np.testing.assert_equal(sorted_params[2], [])
-        np.testing.assert_equal(
-            sorted_params[3], [np.array([0.9, 0.9, 0.9]), np.array([0.8, 0.8, 0.8])]
-        )
+        np.testing.assert_equal(sorted_params[3], [1,2])
 
     def test_sort_mask(self):
         bsp = osiris.BinarySPTree(
@@ -139,13 +137,10 @@ class BSPTest(TestCase):
         )
         sorted_params = bsp.sort(params, mask=np.array([0, 1, 1, 1, 1], dtype=bool))
 
-        np.testing.assert_equal(sorted_params[0], [np.array([1, -0.5, -0.5, -0.5, 8])])
+        np.testing.assert_equal(sorted_params[0], [0])
         np.testing.assert_equal(sorted_params[1], [])
         np.testing.assert_equal(sorted_params[2], [])
-        np.testing.assert_equal(
-            sorted_params[3],
-            [np.array([8, 0.9, 0.9, 0.9, 8]), np.array([9, 0.8, 0.8, 0.8, 8])],
-        )
+        np.testing.assert_equal(sorted_params[3], [1,2])
 
     def test_sp_bounds(self):
         #     y
