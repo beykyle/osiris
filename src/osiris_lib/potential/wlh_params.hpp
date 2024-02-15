@@ -152,7 +152,7 @@ real WLH21Params<proj>::real_spin_a(int, int A, real) const {
 template <Proj proj>
 real WLH21Params<proj>::real_cent_V(int Z, int A, real erg) const {
   // delta = +/- (N-Z)/A ; - for neutron, + for proton
-  const real delta = OMParams<Proj::proton>::asym(Z, A);
+  const real delta = OMParams<proj>::asym(Z, A);
   const real v_erg = v0 - v1 * erg + v2 * erg * erg + v3 * erg * erg * erg;
   const real v_asym = (v4 - v5 * erg + v6 * erg * erg) * delta;
   return -(v_erg + v_asym);
