@@ -20,8 +20,8 @@ KD03Params<Proj::neutron>::KD03Params()
 
 KD03Params<Proj::proton>::KD03Params(json p)
     : KD03Params<Proj::neutron>(p), OMParams<Proj::proton>(),
-      rc_0(p["KDCoulomb_r_C_0"]), rc_A(p["KDCoulomb_r_C_A"]),
-      rc_A2(p["KDCoulomb_r_C_A2"]) {}
+      rc_0(p["KDCoulomb"]["r_C_0"]), rc_A(p["KDCoulomb"]["r_C_A"]),
+      rc_A2(p["KDCoulomb"]["r_C_A2"]) {}
 
 KD03Params<Proj::proton>::KD03Params()
     : KD03Params<Proj::neutron>(), OMParams<Proj::proton>(), rc_0(1.2E0),

@@ -20,7 +20,7 @@ CH89Params<Proj::proton>::CH89Params()
 
 CH89Params<Proj::proton>::CH89Params(json p)
     : CH89Params<Proj::neutron>(p), OMParams<Proj::proton>(),
-      rc_0(p["CH89Coulomb_r_c_0"]), rc_A(p["CH89Coulomb_r_c"]) {}
+      rc_0(p["CH89Coulomb"]["r_c_0"]), rc_A(p["CH89Coulomb"]["r_c"]) {}
 
 real osiris::CH89Params<Proj::proton>::Ec(int Z, int A, real erg) const {
   const real z = static_cast<real>(Z);

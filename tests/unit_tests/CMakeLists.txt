@@ -24,7 +24,6 @@ if(NOT CMAKE_TESTING_ENABLED)
   set(UNIT_TEST_INPUTS
     data/KDUQSamples/KD_default.json
     data/CHUQSamples/CH89_default.json
-    data/WLHSamples/WLH_mean.json
     )
 
   list(TRANSFORM UNIT_TEST_INPUTS PREPEND ${CMAKE_SOURCE_DIR}/)
