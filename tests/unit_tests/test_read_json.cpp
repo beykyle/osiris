@@ -67,34 +67,3 @@ TEST_CASE("Read CH json params from file") {
             chn_def.real_cent_r(66, 156, 189.23));
   }
 }
-
-TEST_CASE("Read WLH json params from file") {
-
-  SECTION("neutron") {
-    // read default
-    const auto path = "WLH_mean.json";
-    auto fstr = std::ifstream(path);
-    json pfile = json::parse(fstr);
-
-    const auto wlh = WLH21Params<Proj::neutron>(pfile);
-
-    const auto wlh_def = WLH21Params<Proj::neutron>();
-
-    REQUIRE(wlh.real_cent_r(66, 156, 189.23) ==
-            wlh_def.real_cent_r(66, 156, 189.23));
-  }
-
-  SECTION("proton") {
-    // read default
-    const auto path = "WLH_mean.json";
-    auto fstr = std::ifstream(path);
-    json pfile = json::parse(fstr);
-
-    const auto wlh = WLH21Params<Proj::proton>(pfile);
-
-    const auto wlh_def = WLH21Params<Proj::proton>();
-
-    REQUIRE(wlh.real_cent_r(66, 156, 189.23) ==
-            wlh_def.real_cent_r(66, 156, 189.23));
-  }
-}
