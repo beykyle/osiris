@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+title: OSIRIS
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Kyle
+    family-names: Beyer
+    email: beyerk@frib.msu.edu
+    affiliation: Facility for Rare Isotope Beams
+    orcid: 'https://orcid.org/0000-0002-2695-2478'
+repository-code: 'https://github.com/beykyle/osiris'
+abstract: >-
+    OSIRIS is a software package for performing uncertainty quantification of reaction observables
+keywords:
+  - nuclear physics
+  - uncertainty quantification
+  - nuclear reactions
+license: BSD-3-Clause
+version: '1.0'
+date-released: '2024'
