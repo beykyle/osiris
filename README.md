@@ -195,4 +195,12 @@ requirements:
 
 Citation
 -----------------
-
+```latex
+@software{Beyer_OSIRIS,
+author = {Beyer, Kyle},
+license = {BSD-3-Clause},
+title = {{OSIRIS}},
+url = {https://github.com/beykyle/osiris},
+version = {0.1}
+}
+```
