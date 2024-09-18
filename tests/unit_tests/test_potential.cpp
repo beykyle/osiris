@@ -32,7 +32,11 @@ TEST_CASE("test CH neutron potential") {
 
 TEST_CASE("test WLH neutron potential") {
 
+  auto erg_cms_wlh = 13.902556528993717;
   auto wlh_params = WLH21Params<Proj::neutron>();
-  auto omp_params = get_global_terms(Xe144, erg_cms, wlh_params);
+  auto omp_params = get_global_terms(Xe144, erg_cms_wlh, wlh_params);
   auto V = OMP<xt::xarray<real>>(1. / 2.);
+  
+  REQUIRE(V(1.8, omp_params).real() == Approx(-44.2993364681));
+  REQUIRE(V(1.8, omp_params).imag() == Approx(-4.046251496295373));
 }

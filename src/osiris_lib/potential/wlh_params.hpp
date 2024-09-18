@@ -98,7 +98,7 @@ template <Proj proj>
 real WLH21Params<proj>::real_cent_r(int, int A, real erg) const {
   const real a = static_cast<real>(A);
   const real a3 = pow(a, 1. / 3.);
-  return (r0 - r1 * erg + r2 * erg * erg) * a3 - r3;
+  return (r0 - r2 * erg + r3 * erg * erg) * a3 - r1;
 }
 
 template <Proj proj>
@@ -172,7 +172,7 @@ real WLH21Params<proj>::cmpl_cent_V(int Z, int A, real erg) const {
 template <Proj proj>
 real WLH21Params<proj>::cmpl_surf_V(int Z, int A, real erg) const {
   if constexpr (proj == Proj::proton) {
-    if (erg > 20)
+    if (erg > 20 or A > 100)
       return 0;
   }
   if constexpr (proj == Proj::neutron) {
